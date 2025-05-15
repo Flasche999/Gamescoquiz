@@ -247,7 +247,7 @@ function updateBuzzState() {
   });
 }
 
-// 🆕 NEU: Einzelne Antwortoption anzeigen (z. B. nur A, B, ...)
+// 🔓 Antwortoption freigeben
 socket.on('revealSingleOption', (letter) => {
   const btn = answerButtons[letter];
   if (btn && currentOptions[letter]) {
@@ -258,17 +258,36 @@ socket.on('revealSingleOption', (letter) => {
   }
 });
 
-// 🏆 Gewinner anzeigen
+// 🏆 Gewinneranzeige animiert + Sound
 socket.on('announceWinner', ({ name, points }) => {
-  const winnerBox = document.getElementById('winner-box');
-  if (winnerBox) {
-    winnerBox.innerHTML = `🎉 <strong>${name}</strong> hat mit <strong>${points}</strong> Punkten gewonnen! 👑`;
-    winnerBox.style.display = 'block';
+  const box = document.createElement('div');
+  box.className = 'winner-box';
+  box.innerHTML = `👑 <strong>${name}</strong> hat das Spiel mit <strong>${points}</strong> Punkten gewonnen! 🎉`;
+  Object.assign(box.style, {
+    background: 'black',
+    color: 'gold',
+    padding: '15px',
+    borderRadius: '12px',
+    fontSize: '22px',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: '20px',
+    animation: 'winner-blink 1s infinite'
+  });
+  document.body.appendChild(box);
 
-    const winnerSound = document.getElementById('winner-sound');
-    if (winnerSound) {
-      winnerSound.currentTime = 0;
-      winnerSound.play().catch(err => console.warn("Winner-Sound konnte nicht abgespielt werden:", err));
-    }
+  const winnerSound = document.getElementById('winner-sound');
+  if (winnerSound) {
+    winnerSound.currentTime = 0;
+    winnerSound.play().catch(err => console.warn("Winner-Sound konnte nicht abgespielt werden:", err));
   }
+
+  const style = document.createElement('style');
+  style.innerHTML = `
+    @keyframes winner-blink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.05); }
+    }
+  `;
+  document.head.appendChild(style);
 });
