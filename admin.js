@@ -31,7 +31,7 @@ socket.on('updatePlayers', (players) => {
     div.className = 'player-card' + (isBuzzed ? ' buzzed-player' : '');
     div.innerHTML = `
       <span class="avatar-smiley">${player.avatar}</span>
-      <strong>${player.name}</strong> – Punkte: <span>${player.points}</span>
+      <strong>${player.name}</strong> – Punkte: <span class="player-points">${player.points}</span>
       <div class="button-row">
         <button onclick="changePoints('${player.id}', 1)">+1</button>
         <button onclick="changePoints('${player.id}', -1)">-1</button>
@@ -42,7 +42,6 @@ socket.on('updatePlayers', (players) => {
 });
 
 socket.on('question', (data) => {
-  // Antwortcontainer beim Laden neuer Frage verstecken
   ['a','b','c','d'].forEach(letter => {
     const container = document.getElementById(`option-${letter}-container`);
     if(container) container.style.display = 'none';
@@ -302,7 +301,7 @@ if (showWinnerBtn) {
 
       playerCards.forEach(card => {
         const name = card.querySelector('strong')?.textContent || '';
-        const pointsText = card.querySelector('span')?.textContent || '0';
+        const pointsText = card.querySelector('.player-points')?.textContent || '0';
         const points = parseInt(pointsText);
 
         if (!isNaN(points) && points > topPoints) {
@@ -376,7 +375,6 @@ function revealSingleOption(letter) {
   socket.emit('revealSingleOption', letter);
 }
 
-// Neu: Antwortcontainer sichtbar machen beim Klick
 function revealOption(letter) {
   const container = document.getElementById(`option-${letter.toLowerCase()}-container`);
   if(container) container.style.display = 'block';
