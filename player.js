@@ -247,6 +247,7 @@ function updateBuzzState() {
   });
 }
 
+// 🔓 Antwortoption freigeben
 socket.on('revealSingleOption', (letter) => {
   const btn = answerButtons[letter];
   if (btn && currentOptions[letter]) {
@@ -257,6 +258,7 @@ socket.on('revealSingleOption', (letter) => {
   }
 });
 
+// 🏆 Gewinneranzeige animiert + Sound
 socket.on('announceWinner', ({ name, points }) => {
   const box = document.createElement('div');
   box.className = 'winner-box';
