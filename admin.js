@@ -187,109 +187,6 @@ socket.on('playWrongSound', () => {
   }
 });
 
-socket.on('playerAnswer', ({ playerId, answer }) => {
-  const answerEl = document.getElementById('buzzed-answer');
-  if (answerEl) {
-    answerEl.innerHTML = `Ausgewählte Antwort: <strong style="color:lime">${answer}</strong>`;
-  }
-
-  ['a', 'b', 'c', 'd'].forEach(letter => {
-    const el = document.getElementById('admin-option-' + letter);
-    if (el) el.classList.remove('selected-admin-answer');
-  });
-
-  const selected = document.getElementById('admin-option-' + answer.toLowerCase());
-  if (selected) selected.classList.add('selected-admin-answer');
-});
-
-socket.on('clearAnswerHighlight', () => {
-  ['a', 'b', 'c', 'd'].forEach(letter => {
-    const el = document.getElementById('admin-option-' + letter);
-    if (el) el.classList.remove('selected-admin-answer');
-  });
-  document.getElementById('buzzed-answer').innerHTML = 'Ausgewählte Antwort: <strong>---</strong>';
-});
-
-socket.on('estimateReceived', ({ playerId, name, value }) => {
-  if (!estimateList) return;
-
-  const parsedValue = parseFloat(value);
-  if (isNaN(parsedValue)) return;
-
-  const existing = estimateList.querySelector(`li[data-player-id="${playerId}"]`);
-  if (existing) existing.remove();
-
-  estimates = estimates.filter(e => e.playerId !== playerId);
-  estimates.push({ playerId, name, value: parsedValue, revealed: false });
-
-  const li = document.createElement('li');
-  li.setAttribute('data-player-id', playerId);
-  li.classList.add('estimate-entry');
-  li.innerHTML = `
-    <strong>${name}:</strong> <span class="hidden-answer">Antwort verborgen</span>
-    <button onclick="revealEstimate('${playerId}')">Antwort zeigen</button>
-    <button onclick="gradeEstimate('${playerId}', true)">✅</button>
-    <button onclick="gradeEstimate('${playerId}', false)">❌</button>
-  `;
-  estimateList.appendChild(li);
-});
-
-function revealEstimate(playerId) {
-  const entry = estimates.find(e => e.playerId === playerId);
-  if (!entry || entry.revealed) return;
-
-  entry.revealed = true;
-
-  const li = estimateList.querySelector(`li[data-player-id='${playerId}']`);
-  if (li) {
-    const span = li.querySelector('.hidden-answer');
-    if (span) {
-      span.textContent = entry.value;
-      span.style.color = '#00ff00';
-      span.style.fontWeight = 'bold';
-    }
-    const btn = li.querySelector('button');
-    if (btn) btn.remove();
-  }
-}
-
-function gradeEstimate(playerId, isCorrect) {
-  if (isCorrect) {
-    changePoints(playerId, 3);
-    socket.emit('playCorrectSound');
-  } else {
-    socket.emit('playWrongSound');
-  }
-}
-
-function markClosestEstimate() {
-  const correct = parseFloat(correctEstimateInput.value);
-  if (isNaN(correct)) {
-    alert("Bitte gültige Zahl eingeben.");
-    return;
-  }
-
-  const withDiff = estimates
-    .filter(e => e.revealed)
-    .map(e => ({ ...e, diff: Math.abs(e.value - correct) }));
-
-  const minDiff = Math.min(...withDiff.map(e => e.diff));
-  const winners = withDiff.filter(e => e.diff === minDiff);
-
-  document.querySelectorAll('#estimate-list li').forEach(li => {
-    li.classList.remove('closest');
-  });
-
-  winners.forEach(winner => {
-    const li = estimateList.querySelector(`li[data-player-id="${winner.playerId}"]`);
-    if (li) li.classList.add('closest');
-  });
-}
-
-function unlockEstimateInputs() {
-  socket.emit('unlockEstimate');
-}
-
 const showWinnerBtn = document.getElementById('show-winner-btn');
 if (showWinnerBtn) {
   showWinnerBtn.addEventListener('click', () => {
@@ -330,6 +227,9 @@ if (showWinnerBtn) {
             }
           }
         });
+
+        // ✅ NEU: Gewinner auch an Spieler senden
+        socket.emit('announceWinner', { name: topPlayer, points: topPoints });
 
         alert(`🎉 Der Gewinner ist: ${topPlayer} mit ${topPoints} Punkten!`);
       } else {
