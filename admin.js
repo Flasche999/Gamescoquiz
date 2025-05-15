@@ -187,6 +187,30 @@ socket.on('playWrongSound', () => {
   }
 });
 
+// ✅ NEU: Antwort anzeigen & Option hervorheben
+socket.on('playerAnswer', ({ playerId, answer }) => {
+  const answerEl = document.getElementById('buzzed-answer');
+  if (answerEl) {
+    answerEl.innerHTML = `Ausgewählte Antwort: <strong style="color:lime">${answer}</strong>`;
+  }
+
+  ['a', 'b', 'c', 'd'].forEach(letter => {
+    const el = document.getElementById('admin-option-' + letter);
+    if (el) el.classList.remove('selected-admin-answer');
+  });
+
+  const selected = document.getElementById('admin-option-' + answer.toLowerCase());
+  if (selected) selected.classList.add('selected-admin-answer');
+});
+
+socket.on('clearAnswerHighlight', () => {
+  ['a', 'b', 'c', 'd'].forEach(letter => {
+    const el = document.getElementById('admin-option-' + letter);
+    if (el) el.classList.remove('selected-admin-answer');
+  });
+  document.getElementById('buzzed-answer').innerHTML = 'Ausgewählte Antwort: <strong>---</strong>';
+});
+
 const showWinnerBtn = document.getElementById('show-winner-btn');
 if (showWinnerBtn) {
   showWinnerBtn.addEventListener('click', () => {
@@ -228,7 +252,6 @@ if (showWinnerBtn) {
           }
         });
 
-        // ✅ NEU: Gewinner auch an Spieler senden
         socket.emit('announceWinner', { name: topPlayer, points: topPoints });
 
         alert(`🎉 Der Gewinner ist: ${topPlayer} mit ${topPoints} Punkten!`);
