@@ -51,6 +51,11 @@ socket.on('joinError', (message) => {
   gameArea.style.display = 'none';
 });
 
+socket.on('joinSuccess', () => {
+  joinArea.style.display = 'none';
+  gameArea.style.display = 'block';
+});
+
 socket.on('connect', () => {
   myId = socket.id;
 });
