@@ -1,0 +1,282 @@
+[
+  {
+    "category": "Fun Facts",
+    "question": "Was passiert, wenn man zu viele Karotten isst?",
+    "options": {
+      "A": "Man wird grün",
+      "B": "Man leuchtet im Dunkeln",
+      "C": "Die Haut wird orange",
+      "D": "Man bekommt Hitzewallungen"
+    },
+    "answer": "C"
+  },
+  {
+    "category": "Schätzfrage",
+    "type": "estimate",
+    "question": "Wie viele Hotdogs hat der Weltrekordhalter in 10 Minuten gegessen?",
+    "answer": 76
+  },
+  {
+    "category": "Gaming",
+    "question": "Wie heißt das grüne Maskottchen von Xbox?",
+    "options": {
+      "A": "Master Chief",
+      "B": "Link",
+      "C": "Kratos",
+      "D": "Luigi"
+    },
+    "answer": "A"
+  },
+  {
+    "category": "Schätzfrage",
+    "type": "estimate",
+    "question": "Wie viele Erbsen passen durchschnittlich in ein 1-Liter-Gefäß?",
+    "answer": 5000
+  },
+  {
+    "category": "Filme & Serien",
+    "question": "Welche Serie dreht sich um eine Gruppe, die gegen übernatürliche Wesen kämpft?",
+    "options": {
+      "A": "Breaking Bad",
+      "B": "Stranger Things",
+      "C": "Friends",
+      "D": "How I Met Your Mother"
+    },
+    "answer": "B"
+  },
+  {
+    "category": "Allgemeinwissen",
+    "question": "Wie viele Zähne hat ein erwachsener Mensch normalerweise?",
+    "options": {
+      "A": "28",
+      "B": "30",
+      "C": "32",
+      "D": "34"
+    },
+    "answer": "C"
+  },
+  {
+    "category": "Schätzfrage",
+    "type": "estimate",
+    "question": "Wie viele Kilometer ist die Strecke von der Erde zum Mond (einfach)?",
+    "answer": 384400
+  },
+  {
+    "category": "Technik",
+    "question": "Wofür steht die Abkürzung 'www' im Internet?",
+    "options": {
+      "A": "World Wide Web",
+      "B": "World Web Wide",
+      "C": "Web World Wide",
+      "D": "Wide Web World"
+    },
+    "answer": "A"
+  },
+  {
+    "category": "Fun Facts",
+    "question": "Welches Tier schläft im Stehen?",
+    "options": {
+      "A": "Schaf",
+      "B": "Pferd",
+      "C": "Hund",
+      "D": "Katze"
+    },
+    "answer": "B"
+  },
+  {
+    "category": "Gaming",
+    "question": "Welche Spielfigur sammelt Münzen und springt auf Gegner?",
+    "options": {
+      "A": "Sonic",
+      "B": "Link",
+      "C": "Mario",
+      "D": "Lara Croft"
+    },
+    "answer": "C"
+  },
+  {
+    "category": "Schätzfrage",
+    "type": "estimate",
+    "question": "Wie viele Wörter spricht ein Mensch im Durchschnitt pro Tag?",
+    "answer": 16000
+  },
+  {
+    "category": "Filme & Serien",
+    "question": "In welchem Film sagt ein Charakter: 'Ich bin dein Vater'?",
+    "options": {
+      "A": "Der Herr der Ringe",
+      "B": "Harry Potter",
+      "C": "Star Wars",
+      "D": "Matrix"
+    },
+    "answer": "C"
+  },
+  {
+    "category": "Allgemeinwissen",
+    "question": "Wie viele Kontinente gibt es?",
+    "options": {
+      "A": "5",
+      "B": "6",
+      "C": "7",
+      "D": "8"
+    },
+    "answer": "C"
+  },
+  {
+    "category": "Schätzfrage",
+    "type": "estimate",
+    "question": "Wie viele Kalorien verbrennt man beim 1-stündigen Lachen?",
+    "answer": 120
+  },
+  {
+    "category": "Fun Facts",
+    "question": "Wie heißt der größte Muskel im menschlichen Körper?",
+    "options": {
+      "A": "Trizeps",
+      "B": "Gluteus Maximus",
+      "C": "Bizeps",
+      "D": "Herz"
+    },
+    "answer": "B"
+  },
+  {
+    "category": "Gaming",
+    "question": "Welches Spiel beginnt mit dem Erwachen auf einem Floß?",
+    "options": {
+      "A": "Raft",
+      "B": "Minecraft",
+      "C": "The Forest",
+      "D": "Ark"
+    },
+    "answer": "A"
+  },
+  {
+    "category": "Technik",
+    "question": "Was misst ein Barometer?",
+    "options": {
+      "A": "Temperatur",
+      "B": "Luftdruck",
+      "C": "Lautstärke",
+      "D": "Lichtintensität"
+    },
+    "answer": "B"
+  },
+  {
+    "category": "Schätzfrage",
+    "type": "estimate",
+    "question": "Wie viele Haare hat ein durchschnittlicher Mensch auf dem Kopf?",
+    "answer": 100000
+  },
+  {
+    "category": "Allgemeinwissen",
+    "question": "Was ist das Symbol für Gold im Periodensystem?",
+    "options": {
+      "A": "Gd",
+      "B": "Ag",
+      "C": "Au",
+      "D": "Go"
+    },
+    "answer": "C"
+  },
+  {
+    "category": "Fun Facts",
+    "question": "Welches Tier kann sich selbst erkennen, wenn es in den Spiegel schaut?",
+    "options": {
+      "A": "Kuh",
+      "B": "Taube",
+      "C": "Delfin",
+      "D": "Schaf"
+    },
+    "answer": "C"
+  },
+  {
+    "category": "Schätzfrage",
+    "type": "estimate",
+    "question": "Wie viele Pizzastücke werden weltweit pro Sekunde gegessen?",
+    "answer": 350
+  },
+  {
+    "category": "Filme & Serien",
+    "question": "Welcher Schauspieler spielt Deadpool?",
+    "options": {
+      "A": "Hugh Jackman",
+      "B": "Ryan Reynolds",
+      "C": "Chris Pratt",
+      "D": "Ben Affleck"
+    },
+    "answer": "B"
+  },
+  {
+    "category": "Gaming",
+    "question": "Wie heißt die legendäre Waffe von Link?",
+    "options": {
+      "A": "Excalibur",
+      "B": "Dragon Slayer",
+      "C": "Master-Schwert",
+      "D": "Zauberschwert"
+    },
+    "answer": "C"
+  },
+  {
+    "category": "Fun Facts",
+    "question": "Wie viele Herzen hat ein Oktopus?",
+    "options": {
+      "A": "1",
+      "B": "2",
+      "C": "3",
+      "D": "4"
+    },
+    "answer": "C"
+  },
+  {
+    "category": "Technik",
+    "question": "Was bedeutet 'USB'?",
+    "options": {
+      "A": "Ultra Safe Bus",
+      "B": "Universal Serial Bus",
+      "C": "Unified System Base",
+      "D": "Universal System Block"
+    },
+    "answer": "B"
+  },
+  {
+    "category": "Schätzfrage",
+    "type": "estimate",
+    "question": "Wie viele Zähne hat ein Hai im Laufe seines Lebens ungefähr?",
+    "answer": 30000
+  },
+  {
+    "category": "Allgemeinwissen",
+    "question": "Welches Land hat die meisten Inseln?",
+    "options": {
+      "A": "Norwegen",
+      "B": "Indonesien",
+      "C": "Schweden",
+      "D": "Japan"
+    },
+    "answer": "C"
+  },
+  {
+    "category": "Fun Facts",
+    "question": "Was macht ein Faultier an einem Tag?",
+    "options": {
+      "A": "Es schläft 2 Stunden",
+      "B": "Es läuft 10 km",
+      "C": "Es hängt herum",
+      "D": "Es schwimmt die ganze Zeit"
+    },
+    "answer": "C"
+  },
+  {
+    "category": "Schätzfrage",
+    "type": "estimate",
+    "question": "Wie viele Liter Speichel produziert ein Mensch durchschnittlich in seinem Leben?",
+    "answer": 25000
+  },
+  {
+    "category": "Schätzfrage",
+    "type": "estimate",
+    "question": "Wie viele Sekunden dauert ein Jahr?",
+    "answer": 31536000
+  }
+]

@@ -1,0 +1,175 @@
+body {
+  background: linear-gradient(to right, #0f0f0f, #1c1c1c);
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+  padding: 20px;
+}
+
+.player-container, .admin-container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
+}
+
+h1, h2, h3 {
+  color: #00ffff;
+  text-shadow: 0 0 5px #00ffff;
+}
+
+input, select, button {
+  background: #111;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin: 5px 0;
+}
+
+button:hover {
+  background-color: #00ffff;
+  color: #000;
+  cursor: pointer;
+}
+
+.avatar-smiley, .smiley-avatar {
+  font-size: 48px;
+  text-align: center;
+  margin: 10px;
+  filter: drop-shadow(0 0 4px cyan);
+}
+
+.player-entry {
+  background: #262626;
+  margin: 6px 0;
+  padding: 10px;
+  border-radius: 12px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0,255,255,0.1);
+  transition: background 0.3s;
+}
+
+.player-entry:hover {
+  background: #333;
+}
+
+/* ✅ Rote Markierung für den Spieler, der gebuzzert hat */
+.player-entry.active-buzz {
+  background-color: #330000;
+  border: 2px solid red;
+  box-shadow: 0 0 10px red;
+}
+
+/* ✅ GRÜN für die gewählte Antwort beim Spieler */
+.selected-answer {
+  background-color: #00ff00 !important;
+  color: black !important;
+  font-weight: bold;
+  border: 2px solid #0f0;
+}
+
+/* ✅ GRÜN für die gewählte Antwort im Admin-Panel */
+.selected-admin-answer {
+  background-color: #00ff00;
+  color: black;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-top: 5px;
+  display: inline-block;
+}
+
+/* ✅ Antwortbuttons Layout */
+.answer-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.answer-button {
+  font-size: 1.2em;
+  background: #222;
+  border: 2px solid #00ffff;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.answer-button:hover:enabled {
+  background: #00ffff;
+  color: black;
+  cursor: pointer;
+}
+
+/* 🆕 Neu: Gesperrte und freigeschaltete Antwort-Buttons */
+.answer-button.locked {
+  background: #111;
+  color: #666;
+  border: 2px dashed #444;
+  cursor: not-allowed;
+}
+
+.answer-button.unlocked {
+  background: #00ffff;
+  color: black;
+  font-weight: bold;
+}
+
+/* ✅ Beste Schätzantwort grün markieren */
+.closest {
+  background-color: #003300;
+  color: #00ff00;
+  font-weight: bold;
+  padding: 6px 10px;
+  border-left: 5px solid lime;
+  margin-top: 4px;
+  border-radius: 6px;
+}
+
+/* ✅ Stil für Schätzfragen-Eingabe */
+#estimate-area {
+  background: #111;
+  border: 2px dashed #00ffff;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 25px;
+  box-shadow: 0 0 10px rgba(0,255,255,0.3);
+}
+
+#estimate-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1.1em;
+  background: #1a1a1a;
+  color: #00ffff;
+  border: 2px solid #00ffff;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+#estimate-input:disabled {
+  opacity: 0.5;
+}
+
+#estimate-submit-btn {
+  background-color: #00ffff;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+#estimate-submit-btn:disabled {
+  background-color: #555;
+  color: #ccc;
+  cursor: not-allowed;
+}

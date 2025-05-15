@@ -1,0 +1,35 @@
+
+🎮 Quizsystem Anleitung
+
+1. Voraussetzungen:
+   - Stelle sicher, dass Node.js installiert ist.
+   - Installiere socket.io und express:
+     npm install express socket.io
+
+2. Projektstruktur:
+   - server.js          → Startet den Quiz-Server
+   - public/
+     ├── player.html    → Spieler-Ansicht
+     ├── player.js      → Spieler-Logik
+     ├── admin.html     → Admin-Ansicht (Platzhalter)
+     ├── admin.js       → Admin-Logik (Platzhalter)
+     ├── style.css      → Design für alle Seiten
+     └── avatars/       → 10 Avatare (avatar1.png bis avatar10.png)
+
+3. Server starten:
+   node server.js
+
+4. Spieler beitreten:
+   - Öffne im Browser: http://localhost:3000/player.html
+   - Namen eingeben, Avatar auswählen, Raumcode „G123“ eingeben
+   - Auf „Beitreten“ klicken
+
+5. Admin aufrufen:
+   - Öffne im Browser: http://localhost:3000/admin.html
+   - Dort erscheinen alle Spieler, Fragen & Buzzersteuerung
+
+ℹ️ Hinweis:
+Die Admin-Seite ist aktuell ein Platzhalter.
+Ersetze admin.html & admin.js durch die echten Dateien.
+
+Viel Spaß!

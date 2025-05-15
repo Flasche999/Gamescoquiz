@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script defer src="admin.js"></script>
+  <style>
+    .avatar-smiley {
+      font-size: 36px;
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .buzzed-player {
+      background-color: #440000;
+      border: 2px solid red;
+      box-shadow: 0 0 10px red;
+    }
+
+    .option-list span {
+      font-weight: bold;
+    }
+
+    .music-control {
+      margin-top: 20px;
+    }
+
+    .question-select-box {
+      margin-top: 20px;
+      padding: 10px;
+      background: #222;
+      border-radius: 10px;
+    }
+
+    .closest {
+      font-weight: bold;
+      background: #003300;
+      color: lime;
+      padding: 3px 6px;
+      border-left: 5px solid lime;
+      margin-top: 4px;
+    }
+
+    .estimate-box,
+    .estimate-control {
+      margin-top: 30px;
+      padding: 15px;
+      background: #1a1a1a;
+      border: 1px solid #00ffff;
+      border-radius: 12px;
+    }
+
+    .estimate-control button {
+      background: #00ffff;
+      color: black;
+      font-weight: bold;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #show-winner-btn {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 18px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #28a745;
+    }
+
+    #show-winner-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Konfetti */
+    #confetti-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .crown-icon {
+      font-size: 28px;
+      color: gold;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <h1>Admin Panel</h1>
+
+    <div class="roomcode-box">
+      <strong>Raumcode:</strong> <span id="room-code">-</span>
+    </div>
+
+    <div class="question-box">
+      <h2>Aktuelle Frage:</h2>
+      <p id="current-question">Noch keine Frage aktiv</p>
+      <div class="option-list" id="question-options">
+        <p id="option-a-container" style="display:none;">A: <span id="admin-option-a">---</span></p>
+        <p id="option-b-container" style="display:none;">B: <span id="admin-option-b">---</span></p>
+        <p id="option-c-container" style="display:none;">C: <span id="admin-option-c">---</span></p>
+        <p id="option-d-container" style="display:none;">D: <span id="admin-option-d">---</span></p>
+      </div>
+
+      <!-- Buttons zum Freischalten -->
+      <div id="reveal-buttons">
+        <button onclick="revealOption('A')">A anzeigen</button>
+        <button onclick="revealOption('B')">B anzeigen</button>
+        <button onclick="revealOption('C')">C anzeigen</button>
+        <button onclick="revealOption('D')">D anzeigen</button>
+      </div>
+
+      <h3>Richtige Antwort:</h3>
+      <p id="correct-answer">---</p>
+      <button id="next-question-btn">Nächste Frage</button>
+    </div>
+
+    <div class="question-select-box">
+      <h2>Frage aus Kategorie starten</h2>
+      <label for="category-select">Kategorie wählen:</label>
+      <select id="category-select">
+        <option value="Gaming">Gaming</option>
+        <option value="Allgemeinwissen">Allgemeinwissen</option>
+        <option value="Filme & Serien">Filme & Serien</option>
+        <option value="Musik">Musik</option>
+        <option value="Sport">Sport</option>
+        <option value="Technik">Technik</option>
+      </select>
+      <button id="start-category-question-btn">Frage starten</button>
+    </div>
+
+    <div class="players-box">
+      <h2>Spieler:</h2>
+      <div id="player-list" class="player-list"></div>
+    </div>
+
+    <div class="buzzer-box">
+      <h2>Buzzer:</h2>
+      <p id="buzzer-info">Noch kein Spieler hat gebuzzert</p>
+      <p id="buzzed-answer">Ausgewählte Antwort: <strong>---</strong></p>
+    </div>
+
+    <div class="question-management">
+      <h2>Fragen hinzufügen</h2>
+      <label>Kategorie:
+        <select id="question-category">
+          <option value="Gaming">Gaming</option>
+          <option value="Allgemeinwissen">Allgemeinwissen</option>
+          <option value="Filme & Serien">Filme & Serien</option>
+          <option value="Musik">Musik</option>
+          <option value="Sport">Sport</option>
+          <option value="Technik">Technik</option>
+        </select>
+      </label>
+      <label>Frage:
+        <input type="text" id="new-question" />
+      </label>
+      <label>Antwort A:
+        <input type="text" id="answer-a" />
+      </label>
+      <label>Antwort B:
+        <input type="text" id="answer-b" />
+      </label>
+      <label>Antwort C:
+        <input type="text" id="answer-c" />
+      </label>
+      <label>Antwort D:
+        <input type="text" id="answer-d" />
+      </label>
+      <label>Richtige Antwort (z. B. A, B, C, D):
+        <input type="text" id="new-answer" />
+      </label>
+      <button id="add-question-btn">Frage speichern</button>
+    </div>
+
+    <div class="question-history">
+      <h2>Falsch beantwortete Fragen</h2>
+      <ul id="wrong-questions-list"></ul>
+    </div>
+
+    <div class="music-control">
+      <h2>Musiksteuerung</h2>
+      <button onclick="playMusic()">▶ Musik starten</button>
+      <button onclick="pauseMusic()">⏸ Musik stoppen</button>
+      <input type="range" min="0" max="1" step="0.01" value="1" onchange="changeVolume(this.value)" />
+    </div>
+
+    <!-- 🎉 Gewinner-Schaltfläche -->
+    <button id="show-winner-btn">🎉 Gewinner</button>
+
+    <div class="estimate-box">
+      <h2>Schätzantworten</h2>
+      <ul id="estimate-list"></ul>
+      <input type="number" id="correct-estimate" placeholder="Richtige Zahl eingeben" />
+      <button onclick="markClosestEstimate()">Nächste finden</button>
+    </div>
+
+    <div class="estimate-control">
+      <h2>Steuerung für Schätzantworten</h2>
+      <button onclick="unlockEstimateInputs()">📤 Schätzfelder freigeben</button>
+    </div>
+
+    <!-- Sounds -->
+    <audio id="background-music" src="audio/background.mp3" loop></audio>
+    <audio id="buzzer-sound" src="sounds/buzzer.mp3"></audio>
+    <audio id="correct-sound" src="sounds/correct.mp3"></audio>
+    <audio id="wrong-sound" src="sounds/wrong.mp3"></audio>
+    <audio id="winner-sound" src="sounds/winner.mp3"></audio>
+  </div>
+
+  <!-- Konfetti-Effekt -->
+  <div id="confetti-container"></div>
+</body>
+</html>
