@@ -252,9 +252,23 @@ socket.on('revealSingleOption', (letter) => {
   const btn = answerButtons[letter];
   if (btn && currentOptions[letter]) {
     btn.innerHTML = `${letter}: ${currentOptions[letter]}`;
-    // Nur aktivieren, wenn der Spieler gebuzzert hat und er der aktive buzzer ist
     btn.disabled = !(myId === activeBuzzPlayerId && hasBuzzed);
     btn.classList.remove('locked');
     btn.classList.add('unlocked');
+  }
+});
+
+// 🏆 Gewinner anzeigen
+socket.on('announceWinner', ({ name, points }) => {
+  const winnerBox = document.getElementById('winner-box');
+  if (winnerBox) {
+    winnerBox.innerHTML = `🎉 <strong>${name}</strong> hat mit <strong>${points}</strong> Punkten gewonnen! 👑`;
+    winnerBox.style.display = 'block';
+
+    const winnerSound = document.getElementById('winner-sound');
+    if (winnerSound) {
+      winnerSound.currentTime = 0;
+      winnerSound.play().catch(err => console.warn("Winner-Sound konnte nicht abgespielt werden:", err));
+    }
   }
 });
