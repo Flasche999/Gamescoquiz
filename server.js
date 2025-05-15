@@ -34,9 +34,9 @@ io.on('connection', (socket) => {
   console.log('🔌 Neuer Client verbunden:', socket.id);
   socket.emit('roomCode', roomCode);
 
-  socket.on('registerPlayer', ({ name, avatar, roomCode: enteredCode }) => {
-    if (parseInt(enteredCode) !== roomCode) {
-      socket.emit('joinFailed', '❌ Falscher Raumcode!');
+  socket.on('registerPlayer', ({ name, avatar, roomCode: submittedCode }) => {
+    if (parseInt(submittedCode) !== roomCode) {
+      socket.emit('joinError', '❌ Falscher Raumcode.');
       return;
     }
 
@@ -48,6 +48,7 @@ io.on('connection', (socket) => {
     };
     players.push(newPlayer);
     io.emit('updatePlayers', players);
+    socket.emit('joinSuccess');
   });
 
   socket.on('changePoints', ({ playerId, points }) => {
