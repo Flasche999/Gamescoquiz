@@ -34,9 +34,9 @@ io.on('connection', (socket) => {
   console.log('🔌 Neuer Client verbunden:', socket.id);
   socket.emit('roomCode', roomCode);
 
-  socket.on('registerPlayer', ({ name, avatar, roomCode: clientRoomCode }) => {
-    if (parseInt(clientRoomCode) !== roomCode) {
-      socket.emit('errorMessage', '🚫 Raumcode ist ungültig.');
+  socket.on('registerPlayer', ({ name, avatar, roomCode: enteredCode }) => {
+    if (parseInt(enteredCode) !== roomCode) {
+      socket.emit('joinFailed', '❌ Falscher Raumcode!');
       return;
     }
 
