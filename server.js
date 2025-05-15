@@ -34,7 +34,12 @@ io.on('connection', (socket) => {
   console.log('🔌 Neuer Client verbunden:', socket.id);
   socket.emit('roomCode', roomCode);
 
-  socket.on('registerPlayer', ({ name, avatar }) => {
+  socket.on('registerPlayer', ({ name, avatar, roomCode: clientRoomCode }) => {
+    if (parseInt(clientRoomCode) !== roomCode) {
+      socket.emit('errorMessage', '🚫 Raumcode ist ungültig.');
+      return;
+    }
+
     const newPlayer = {
       id: socket.id,
       name,
@@ -161,9 +166,8 @@ io.on('connection', (socket) => {
     io.emit('unlockEstimate');
   });
 
-  // 🆕 NEU: Einzelne Antwortoption (A–D) anzeigen
   socket.on('revealSingleOption', (letter) => {
-    io.emit('revealSingleOption', letter); // z. B. 'A', 'B', 'C' oder 'D'
+    io.emit('revealSingleOption', letter);
   });
 
   socket.on('disconnect', () => {
@@ -172,7 +176,6 @@ io.on('connection', (socket) => {
     console.log('❌ Client getrennt:', socket.id);
   });
 
-  // 🔊 Soundsteuerung
   socket.on('playCorrectSound', () => io.emit('playCorrectSound'));
   socket.on('playWrongSound', () => io.emit('playWrongSound'));
   socket.on('playMusic', () => io.emit('playMusic'));
