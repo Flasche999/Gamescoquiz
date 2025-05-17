@@ -400,3 +400,21 @@ if (sendImageBtn && hideImageBtn && imageUrlInput) {
     socket.emit('hideImageQuestion');
   });
 }
+
+const memoryUrlInput = document.getElementById('memory-image-url');
+const btnShowPreview = document.getElementById('btn-show-preview');
+const btnShowBlack = document.getElementById('btn-show-black');
+
+btnShowPreview?.addEventListener('click', () => {
+  const imageUrl = memoryUrlInput.value.trim();
+  if (imageUrl) {
+    socket.emit('showPreviewImage', { imageUrl });
+  }
+});
+
+btnShowBlack?.addEventListener('click', () => {
+  const imageUrl = memoryUrlInput.value.trim();
+  if (imageUrl) {
+    socket.emit('showDarkenedImage', { imageUrl });
+  }
+});
