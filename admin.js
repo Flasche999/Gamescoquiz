@@ -147,6 +147,7 @@ nextQuestionBtn.addEventListener('click', () => {
 function updatePlayers() {
   socket.emit('requestUpdate');
 }
+
 function playMusic() {
   socket.emit('playMusic');
 }
@@ -206,6 +207,7 @@ socket.on('clearAnswerHighlight', () => {
   });
   document.getElementById('buzzed-answer').innerHTML = 'Ausgewählte Antwort: <strong>---</strong>';
 });
+
 socket.on('estimateReceived', ({ playerId, name, value }) => {
   if (!estimateList) return;
 
@@ -284,86 +286,6 @@ function markClosestEstimate() {
 
 function unlockEstimateInputs() {
   socket.emit('unlockEstimate');
-}
-const showWinnerBtn = document.getElementById('show-winner-btn');
-if (showWinnerBtn) {
-  showWinnerBtn.addEventListener('click', () => {
-    socket.emit('requestUpdate');
-    setTimeout(() => {
-      const playerCards = document.querySelectorAll('.player-card');
-      let topPlayer = null;
-      let topPoints = -Infinity;
-
-      playerCards.forEach(card => {
-        const name = card.querySelector('strong')?.textContent || '';
-        const pointsText = card.querySelector('.player-points')?.textContent || '0';
-        const points = parseInt(pointsText);
-
-        if (!isNaN(points) && points > topPoints) {
-          topPoints = points;
-          topPlayer = name;
-        }
-      });
-
-      if (topPlayer !== null) {
-        showConfetti();
-
-        const winnerSound = document.getElementById('winner-sound');
-        if (winnerSound) {
-          winnerSound.currentTime = 0;
-          winnerSound.play().catch(err => console.warn("Gewinner-Sound konnte nicht abgespielt werden:", err));
-        }
-
-        document.querySelectorAll('.player-card').forEach(card => {
-          const name = card.querySelector('strong')?.textContent || '';
-          const avatarEl = card.querySelector('.avatar-smiley');
-          if (avatarEl) {
-            if (name === topPlayer) {
-              avatarEl.innerHTML = '👑 ' + avatarEl.innerHTML.replace('👑', '').trim();
-            } else {
-              avatarEl.innerHTML = avatarEl.innerHTML.replace('👑', '').trim();
-            }
-          }
-        });
-
-        alert(`🎉 Der Gewinner ist: ${topPlayer} mit ${topPoints} Punkten!`);
-      } else {
-        alert("❗ Kein Spieler gefunden.");
-      }
-    }, 300);
-  });
-}
-
-function showConfetti() {
-  const container = document.getElementById('confetti-container');
-  if (!container) return;
-
-  container.innerHTML = '';
-  const count = 150;
-
-  for (let i = 0; i < count; i++) {
-    const confetti = document.createElement('div');
-    confetti.style.position = 'absolute';
-    confetti.style.width = '10px';
-    confetti.style.height = '10px';
-    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-    confetti.style.top = '-20px';
-    confetti.style.left = `${Math.random() * 100}%`;
-    confetti.style.opacity = Math.random();
-    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-    confetti.style.transition = 'top 3s ease-out';
-    container.appendChild(confetti);
-
-    setTimeout(() => {
-      confetti.style.top = '100%';
-    }, 50);
-  }
-
-  container.style.display = 'block';
-  setTimeout(() => {
-    container.style.display = 'none';
-    container.innerHTML = '';
-  }, 3500);
 }
 
 function revealSingleOption(letter) {
