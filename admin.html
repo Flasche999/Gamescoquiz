@@ -97,6 +97,13 @@
       margin-right: 6px;
       vertical-align: middle;
     }
+
+    #memory-timer {
+      font-size: 22px;
+      font-weight: bold;
+      color: #00ffff;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -117,7 +124,9 @@
         <p id="option-d-container" style="display:none;">D: <span id="admin-option-d">---</span></p>
       </div>
 
-      <!-- Buttons zum Freischalten -->
+      <!-- Countdown-Anzeige -->
+      <p id="memory-timer" style="display:none;">⏳ Zeit: 20</p>
+
       <div id="reveal-buttons">
         <button onclick="revealOption('A')">A anzeigen</button>
         <button onclick="revealOption('B')">B anzeigen</button>
@@ -200,7 +209,6 @@
       <input type="range" min="0" max="1" step="0.01" value="1" onchange="changeVolume(this.value)" />
      </div>
 
-     <!-- Bildrätsel starten -->
      <div class="image-quiz-control" style="margin-top: 30px;">
      <h2>Bilderrätsel</h2>
      <input type="text" id="image-url-input" placeholder="Bild-URL eingeben" style="width: 60%;" />
@@ -208,7 +216,6 @@
      <button id="hide-image-question-btn">🧹 Bild ausblenden</button>
      </div>
 
-     <!-- Memory-Bilderrätsel: Vorschau und Schwarzbild -->
      <div class="image-memory-control" style="margin-top: 30px;">
      <h2>Memory-Bilderrätsel</h2>
      <input type="text" id="memory-image-url" placeholder="Bild-URL für Memory-Rätsel" style="width: 60%;" />
@@ -216,9 +223,6 @@
      <button id="btn-show-black">🕶️ Schwarzes Bild anzeigen</button>
      </div>
 
-
-
-     <!-- 🎉 Gewinner-Schaltfläche -->
      <button id="show-winner-btn">🎉 Gewinner</button>
 
      <div class="estimate-box">
@@ -233,15 +237,13 @@
       <button onclick="unlockEstimateInputs()">📤 Schätzfelder freigeben</button>
      </div>
 
-     <!-- Sounds -->
      <audio id="background-music" src="audio/background.mp3" loop></audio>
      <audio id="buzzer-sound" src="sounds/buzzer.mp3"></audio>
      <audio id="correct-sound" src="sounds/correct.mp3"></audio>
      <audio id="wrong-sound" src="sounds/wrong.mp3"></audio>
      <audio id="winner-sound" src="sounds/winner.mp3"></audio>
-     </div>
+  </div>
 
-     <!-- Konfetti-Effekt -->
-     <div id="confetti-container"></div>
-     </body>
-     </html>
+  <div id="confetti-container"></div>
+</body>
+</html>
