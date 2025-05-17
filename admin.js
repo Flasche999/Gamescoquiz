@@ -380,3 +380,23 @@ function revealOption(letter) {
   if(container) container.style.display = 'block';
   socket.emit('revealSingleOption', letter);
 }
+
+// 📸 Bilderrätsel anzeigen/verstecken
+const imageUrlInput = document.getElementById('image-url-input');
+const sendImageBtn = document.getElementById('send-image-question-btn');
+const hideImageBtn = document.getElementById('hide-image-question-btn');
+
+if (sendImageBtn && hideImageBtn && imageUrlInput) {
+  sendImageBtn.addEventListener('click', () => {
+    const imageUrl = imageUrlInput.value.trim();
+    if (imageUrl) {
+      socket.emit('showImageQuestion', { imageUrl });
+    } else {
+      alert("❗ Bitte eine Bild-URL eingeben!");
+    }
+  });
+
+  hideImageBtn.addEventListener('click', () => {
+    socket.emit('hideImageQuestion');
+  });
+}
