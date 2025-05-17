@@ -91,6 +91,7 @@ if (manualDarkenBtn) {
     socket.emit('darkenImageManually');
   });
 }
+
 socket.on('playerBuzzed', (player) => {
   currentBuzzer = player;
   buzzerInfo.innerHTML = `
@@ -297,3 +298,8 @@ function revealOption(letter) {
   if (container) container.style.display = 'block';
   socket.emit('revealSingleOption', letter);
 }
+
+// ✅ NEU: Klickpositionen im Memory anzeigen
+document.getElementById('btn-reveal-clicks')?.addEventListener('click', () => {
+  socket.emit('requestRevealClicks');
+});
