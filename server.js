@@ -34,9 +34,9 @@ io.on('connection', (socket) => {
   console.log('🔌 Neuer Client verbunden:', socket.id);
   socket.emit('roomCode', roomCode);
 
-  socket.on('registerPlayer', ({ name, avatar, roomCode: submittedCode }) => {
-    if (parseInt(submittedCode) !== roomCode) {
-      socket.emit('joinError', '❌ Falscher Raumcode.');
+  socket.on('registerPlayer', ({ name, avatar, roomCode: clientRoomCode }) => {
+    if (parseInt(clientRoomCode) !== roomCode) {
+      socket.emit('errorMessage', '🚫 Raumcode ist ungültig.');
       return;
     }
 
@@ -48,7 +48,6 @@ io.on('connection', (socket) => {
     };
     players.push(newPlayer);
     io.emit('updatePlayers', players);
-    socket.emit('joinSuccess');
   });
 
   socket.on('changePoints', ({ playerId, points }) => {
@@ -182,6 +181,23 @@ io.on('connection', (socket) => {
   socket.on('playMusic', () => io.emit('playMusic'));
   socket.on('pauseMusic', () => io.emit('pauseMusic'));
   socket.on('setVolume', (volume) => io.emit('setVolume', volume));
+
+  // 📸 NEU: Bilderrätsel-Funktion
+  socket.on('showImageQuestion', ({ imageUrl }) => {
+    io.emit('showImageQuestion', { imageUrl });
+  });
+
+  socket.on('hideImageQuestion', () => {
+    io.emit('hideImageQuestion');
+  });
+
+  socket.on('imageAnswer', ({ x, y }) => {
+    const player = players.find(p => p.id === socket.id);
+    if (player) {
+      console.log(`🖼️ ${player.name} klickte bei X: ${(x * 100).toFixed(1)}%, Y: ${(y * 100).toFixed(1)}%`);
+      // Optional: Hier kann später ein Abgleich mit Zielkoordinaten erfolgen
+    }
+  });
 });
 
 server.listen(PORT, () => {
