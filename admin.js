@@ -64,7 +64,7 @@ socket.on('question', (data) => {
   estimates = [];
 });
 
-// Countdown für Memory-Rätsel
+// Countdown bei Memory-Vorschau
 socket.on('showPreviewImage', ({ imageUrl }) => {
   const timerBox = document.createElement('div');
   timerBox.id = 'countdown-timer';
@@ -409,7 +409,7 @@ function revealOption(letter) {
   socket.emit('revealSingleOption', letter);
 }
 
-// 📸 Bilderrätsel anzeigen/verstecken
+// 📸 Bilderrätsel
 const imageUrlInput = document.getElementById('image-url-input');
 const sendImageBtn = document.getElementById('send-image-question-btn');
 const hideImageBtn = document.getElementById('hide-image-question-btn');
@@ -429,9 +429,11 @@ if (sendImageBtn && hideImageBtn && imageUrlInput) {
   });
 }
 
+// 🧠 Memory-Logik + MANUELLES Abdunkeln
 const memoryUrlInput = document.getElementById('memory-image-url');
 const btnShowPreview = document.getElementById('btn-show-preview');
 const btnShowBlack = document.getElementById('btn-show-black');
+const btnManualDarken = document.getElementById('btn-manual-darken'); // NEU
 
 btnShowPreview?.addEventListener('click', () => {
   const imageUrl = memoryUrlInput.value.trim();
@@ -445,4 +447,8 @@ btnShowBlack?.addEventListener('click', () => {
   if (imageUrl) {
     socket.emit('showDarkenedImage', { imageUrl });
   }
+});
+
+btnManualDarken?.addEventListener('click', () => {
+  socket.emit('darkenImageManually');
 });
