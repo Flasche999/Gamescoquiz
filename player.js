@@ -318,3 +318,29 @@ socket.on('hideImageQuestion', () => {
   imageQuizArea.style.display = 'none';
   quizImage.src = '';
 });
+
+const previewImageArea = document.getElementById('preview-image-area');
+const previewImage = document.getElementById('preview-image');
+const hiddenImageArea = document.getElementById('hidden-image-area');
+const hiddenImage = document.getElementById('hidden-image');
+const blackOverlay = document.getElementById('black-overlay');
+
+socket.on('showPreviewImage', ({ imageUrl }) => {
+  previewImage.src = imageUrl;
+  previewImageArea.style.display = 'block';
+  hiddenImageArea.style.display = 'none';
+  imageQuizArea.style.display = 'none';
+});
+
+socket.on('showDarkenedImage', ({ imageUrl }) => {
+  previewImageArea.style.display = 'none';
+  hiddenImage.src = imageUrl;
+  hiddenImageArea.style.display = 'block';
+});
+
+blackOverlay.addEventListener('click', function (e) {
+  const rect = hiddenImage.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / hiddenImage.width).toFixed(4);
+  const y = ((e.clientY - rect.top) / hiddenImage.height).toFixed(4);
+  socket.emit('imageAnswer', { x: parseFloat(x), y: parseFloat(y) });
+});
