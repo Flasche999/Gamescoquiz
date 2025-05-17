@@ -200,6 +200,15 @@
       <input type="range" min="0" max="1" step="0.01" value="1" onchange="changeVolume(this.value)" />
     </div>
 
+    <!-- Bildrätsel starten -->
+    <div class="image-quiz-control" style="margin-top: 30px;">
+     <h2>Bilderrätsel</h2>
+    <input type="text" id="image-url-input" placeholder="Bild-URL eingeben" style="width: 60%;" />
+    <button id="send-image-question-btn">📷 Bild anzeigen</button>
+    <button id="hide-image-question-btn">🧹 Bild ausblenden</button>
+   </div>
+
+
     <!-- 🎉 Gewinner-Schaltfläche -->
     <button id="show-winner-btn">🎉 Gewinner</button>
 
@@ -225,7 +234,5 @@
 
   <!-- Konfetti-Effekt -->
   <div id="confetti-container"></div>
-</body>
-</html>
 </body>
 </html>
