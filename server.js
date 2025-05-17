@@ -98,11 +98,7 @@ io.on('connection', (socket) => {
 
       if (q.type === 'memory' && q.imageUrl && q.solution) {
         io.emit('showPreviewImage', { imageUrl: q.imageUrl });
-
-        setTimeout(() => {
-          io.emit('showDarkenedImage', { imageUrl: q.imageUrl });
-          currentImageTarget = q.solution;
-        }, 20000);
+        currentImageTarget = q.solution;
       } else if (q.type === 'image' && q.imageUrl) {
         io.emit('showImageQuestion', { imageUrl: q.imageUrl });
         currentImageTarget = q.solution || null;
@@ -110,7 +106,6 @@ io.on('connection', (socket) => {
         io.emit('hideImageQuestion');
         currentImageTarget = null;
       }
-
     } else {
       console.log("✅ Alle Fragen wurden gestellt.");
     }
@@ -240,7 +235,6 @@ io.on('connection', (socket) => {
     }
   });
 
-  // 🆕 Manuelles Abdunkeln per Button im Admin-Panel
   socket.on('darkenImageManually', () => {
     if (questionDB[globalQuestionIndex - 1]?.imageUrl) {
       io.emit('showDarkenedImage', { imageUrl: questionDB[globalQuestionIndex - 1].imageUrl });
