@@ -108,7 +108,7 @@ button:hover {
   cursor: pointer;
 }
 
-/* 🆕 Neu: Gesperrte und freigeschaltete Antwort-Buttons */
+/* 🆕 Gesperrte und freigeschaltete Antwort-Buttons */
 .answer-button.locked {
   background: #111;
   color: #666;
