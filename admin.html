@@ -162,85 +162,37 @@
       <p id="buzzed-answer">Ausgewählte Antwort: <strong>---</strong></p>
     </div>
 
-    <div class="question-management">
-      <h2>Fragen hinzufügen</h2>
-      <label>Kategorie:
-        <select id="question-category">
-          <option value="Gaming">Gaming</option>
-          <option value="Allgemeinwissen">Allgemeinwissen</option>
-          <option value="Filme & Serien">Filme & Serien</option>
-          <option value="Musik">Musik</option>
-          <option value="Sport">Sport</option>
-          <option value="Technik">Technik</option>
-        </select>
-      </label>
-      <label>Frage:
-        <input type="text" id="new-question" />
-      </label>
-      <label>Antwort A:
-        <input type="text" id="answer-a" />
-      </label>
-      <label>Antwort B:
-        <input type="text" id="answer-b" />
-      </label>
-      <label>Antwort C:
-        <input type="text" id="answer-c" />
-      </label>
-      <label>Antwort D:
-        <input type="text" id="answer-d" />
-      </label>
-      <label>Richtige Antwort (z. B. A, B, C, D):
-        <input type="text" id="new-answer" />
-      </label>
-      <button id="add-question-btn">Frage speichern</button>
-     </div>
-
-     <div class="question-history">
+    <div class="question-history">
       <h2>Falsch beantwortete Fragen</h2>
       <ul id="wrong-questions-list"></ul>
-     </div>
+    </div>
 
-     <div class="music-control">
+    <div class="music-control">
       <h2>Musiksteuerung</h2>
       <button onclick="playMusic()">▶ Musik starten</button>
       <button onclick="pauseMusic()">⏸ Musik stoppen</button>
       <input type="range" min="0" max="1" step="0.01" value="1" onchange="changeVolume(this.value)" />
-     </div>
+    </div>
 
-     <div class="image-quiz-control" style="margin-top: 30px;">
-     <h2>Bilderrätsel</h2>
-     <input type="text" id="image-url-input" placeholder="Bild-URL eingeben" style="width: 60%;" />
-     <button id="send-image-question-btn">📷 Bild anzeigen</button>
-     <button id="hide-image-question-btn">🧹 Bild ausblenden</button>
-     </div>
+    <button id="show-winner-btn">🎉 Gewinner</button>
 
-     <div class="image-memory-control" style="margin-top: 30px;">
-     <h2>Memory-Bilderrätsel</h2>
-     <input type="text" id="memory-image-url" placeholder="Bild-URL für Memory-Rätsel" style="width: 60%;" />
-     <button id="btn-show-preview">👁️ Vorschau anzeigen</button>
-     <button id="btn-show-black">🕶️ Schwarzes Bild anzeigen</button>
-     <button id="btn-manual-darken">🌒 Memory-Bild abdunkeln</button>
-     </div>
-
-     <button id="show-winner-btn">🎉 Gewinner</button>
-
-     <div class="estimate-box">
+    <div class="estimate-box">
       <h2>Schätzantworten</h2>
       <ul id="estimate-list"></ul>
       <input type="number" id="correct-estimate" placeholder="Richtige Zahl eingeben" />
       <button onclick="markClosestEstimate()">Nächste finden</button>
-     </div>
+    </div>
 
-     <div class="estimate-control">
+    <div class="estimate-control">
       <h2>Steuerung für Schätzantworten</h2>
       <button onclick="unlockEstimateInputs()">📤 Schätzfelder freigeben</button>
-     </div>
+    </div>
 
-     <audio id="background-music" src="audio/background.mp3" loop></audio>
-     <audio id="buzzer-sound" src="sounds/buzzer.mp3"></audio>
-     <audio id="correct-sound" src="sounds/correct.mp3"></audio>
-     <audio id="wrong-sound" src="sounds/wrong.mp3"></audio>
-     <audio id="winner-sound" src="sounds/winner.mp3"></audio>
+    <audio id="background-music" src="audio/background.mp3" loop></audio>
+    <audio id="buzzer-sound" src="sounds/buzzer.mp3"></audio>
+    <audio id="correct-sound" src="sounds/correct.mp3"></audio>
+    <audio id="wrong-sound" src="sounds/wrong.mp3"></audio>
+    <audio id="winner-sound" src="sounds/winner.mp3"></audio>
   </div>
 
   <div id="confetti-container"></div>
