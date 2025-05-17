@@ -9,3 +9,9 @@
     "tolerance": 0.05
   }
 }
+  {
+    "category": "Schätzfrage",
+    "type": "estimate",
+    "question": "Wie viele Hotdogs hat der Weltrekordhalter in 10 Minuten gegessen?",
+    "answer": 76
+  },
