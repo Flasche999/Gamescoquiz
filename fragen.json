@@ -1,11 +1,11 @@
 {
   "category": "Bilderrätsel",
   "type": "memory",
-  "question": "Merke dir, das Bild!",
+  "question": "Wo war das rote Objekt?",
   "imageUrl": "https://imgur.com/ukmJJfc.jpg",
   "solution": {
     "x": 0.5299,
-    "y": 0.4730,
+    "y": 0.4755,
     "tolerance": 0.05
   }
 }
