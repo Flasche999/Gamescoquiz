@@ -303,3 +303,34 @@ function revealOption(letter) {
 document.getElementById('btn-reveal-clicks')?.addEventListener('click', () => {
   socket.emit('requestRevealClicks');
 });
+
+socket.on('revealClickPositions', (clicks) => {
+  const overlay = document.createElement('div');
+  overlay.id = 'click-overlay';
+  overlay.style.position = 'fixed';
+  overlay.style.top = 0;
+  overlay.style.left = 0;
+  overlay.style.width = '100%';
+  overlay.style.height = '100%';
+  overlay.style.pointerEvents = 'none';
+  overlay.style.zIndex = 9998;
+
+  clicks.forEach(({ x, y }) => {
+    const dot = document.createElement('div');
+    dot.style.position = 'absolute';
+    dot.style.width = '20px';
+    dot.style.height = '20px';
+    dot.style.backgroundColor = 'red';
+    dot.style.borderRadius = '50%';
+    dot.style.left = `${x * 100}%`;
+    dot.style.top = `${y * 100}%`;
+    dot.style.transform = 'translate(-50%, -50%)';
+    overlay.appendChild(dot);
+  });
+
+  document.body.appendChild(overlay);
+
+  setTimeout(() => {
+    overlay.remove();
+  }, 10000); // nach 10 Sekunden wieder entfernen
+});
