@@ -102,7 +102,7 @@ io.on('connection', (socket) => {
         setTimeout(() => {
           io.emit('showDarkenedImage', { imageUrl: q.imageUrl });
           currentImageTarget = q.solution;
-        }, 5000);
+        }, 20000);
       } else if (q.type === 'image' && q.imageUrl) {
         io.emit('showImageQuestion', { imageUrl: q.imageUrl });
         currentImageTarget = q.solution || null;
