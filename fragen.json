@@ -1,5 +1,4 @@
-[
- {
+{
   "category": "Bilderrätsel",
   "type": "memory",
   "question": "Wo war das rote Objekt?",
@@ -9,10 +8,10 @@
     "y": 0.4755,
     "tolerance": 0.05
   }
-}
- {
-    "category": "Fun Facts",
-    "question": "Was passiert, wenn man zu viele Karotten isst?",
+},
+{
+  "category": "Fun Facts",
+  "question": "Was passiert, wenn man zu viele Karotten isst?",
     "options": {
       "A": "Man wird grün",
       "B": "Man leuchtet im Dunkeln",
