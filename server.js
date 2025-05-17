@@ -187,7 +187,6 @@ io.on('connection', (socket) => {
     io.emit('revealSingleOption', letter);
   });
 
-  // 🧠 NEU: Memory-Vorschau auf Anfrage anzeigen
   socket.on('requestImageReveal', ({ imageUrl }) => {
     socket.emit('showPreviewImage', { imageUrl });
     setTimeout(() => {
@@ -238,6 +237,14 @@ io.on('connection', (socket) => {
         }
         io.emit('updatePlayers', players);
       }
+    }
+  });
+
+  // 🆕 Manuelles Abdunkeln per Button im Admin-Panel
+  socket.on('darkenImageManually', () => {
+    if (questionDB[globalQuestionIndex - 1]?.imageUrl) {
+      io.emit('showDarkenedImage', { imageUrl: questionDB[globalQuestionIndex - 1].imageUrl });
+      currentImageTarget = questionDB[globalQuestionIndex - 1].solution || null;
     }
   });
 });
