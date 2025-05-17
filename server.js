@@ -21,6 +21,7 @@ let globalQuestionIndex = 0;
 let roomCode = Math.floor(1000 + Math.random() * 9000);
 let currentImageTarget = null;
 let memoryClicks = new Set();
+const playerClickMap = new Map();
 
 if (fs.existsSync(QUESTIONS_FILE)) {
   try {
@@ -97,6 +98,7 @@ io.on('connection', (socket) => {
 
       buzzerLocked = false;
       memoryClicks.clear();
+      playerClickMap.clear();
 
       if (q.type === 'memory' && q.imageUrl && q.solution) {
         io.emit('showPreviewImage', { imageUrl: q.imageUrl });
@@ -235,6 +237,7 @@ io.on('connection', (socket) => {
       console.log(`🖼️ ${player.name} klickte bei X: ${(x * 100).toFixed(1)}%, Y: ${(y * 100).toFixed(1)}%`);
       const { x: tx, y: ty, tolerance } = currentImageTarget;
       const isCorrect = Math.abs(x - tx) <= tolerance && Math.abs(y - ty) <= tolerance;
+      playerClickMap.set(player.id, { x, y, name: player.name });
       if (isCorrect) {
         player.points += 3;
         socket.emit('playCorrectSound');
@@ -243,6 +246,11 @@ io.on('connection', (socket) => {
       }
       io.emit('updatePlayers', players);
     }
+  });
+
+  socket.on('revealPlayerClicks', () => {
+    const allClicks = Array.from(playerClickMap.values());
+    io.emit('revealClicksToAll', allClicks);
   });
 });
 
