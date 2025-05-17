@@ -64,6 +64,34 @@ socket.on('question', (data) => {
   estimates = [];
 });
 
+// Countdown für Memory-Rätsel
+socket.on('showPreviewImage', ({ imageUrl }) => {
+  const timerBox = document.createElement('div');
+  timerBox.id = 'countdown-timer';
+  timerBox.style.position = 'fixed';
+  timerBox.style.top = '10px';
+  timerBox.style.right = '10px';
+  timerBox.style.padding = '10px 20px';
+  timerBox.style.backgroundColor = 'black';
+  timerBox.style.color = '#00ffff';
+  timerBox.style.fontSize = '24px';
+  timerBox.style.border = '2px solid #00ffff';
+  timerBox.style.borderRadius = '12px';
+  document.body.appendChild(timerBox);
+
+  let secondsLeft = 20;
+  timerBox.textContent = `⏳ ${secondsLeft} Sekunden`;
+  const countdown = setInterval(() => {
+    secondsLeft--;
+    if (secondsLeft <= 0) {
+      clearInterval(countdown);
+      timerBox.remove();
+    } else {
+      timerBox.textContent = `⏳ ${secondsLeft} Sekunden`;
+    }
+  }, 1000);
+});
+
 socket.on('playerBuzzed', (player) => {
   currentBuzzer = player;
   buzzerInfo.innerHTML = `
