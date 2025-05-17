@@ -182,7 +182,7 @@ io.on('connection', (socket) => {
   socket.on('pauseMusic', () => io.emit('pauseMusic'));
   socket.on('setVolume', (volume) => io.emit('setVolume', volume));
 
-  // 📸 NEU: Bilderrätsel-Funktion
+  // 📸 Bilderrätsel anzeigen
   socket.on('showImageQuestion', ({ imageUrl }) => {
     io.emit('showImageQuestion', { imageUrl });
   });
@@ -191,11 +191,20 @@ io.on('connection', (socket) => {
     io.emit('hideImageQuestion');
   });
 
+  // 🧠 Memory-Bilderrätsel
+  socket.on('showPreviewImage', ({ imageUrl }) => {
+    io.emit('showPreviewImage', { imageUrl });
+  });
+
+  socket.on('showDarkenedImage', ({ imageUrl }) => {
+    io.emit('showDarkenedImage', { imageUrl });
+  });
+
   socket.on('imageAnswer', ({ x, y }) => {
     const player = players.find(p => p.id === socket.id);
     if (player) {
       console.log(`🖼️ ${player.name} klickte bei X: ${(x * 100).toFixed(1)}%, Y: ${(y * 100).toFixed(1)}%`);
-      // Optional: Hier kann später ein Abgleich mit Zielkoordinaten erfolgen
+      // Hier könntest du vergleichen mit vorher gespeicherten Zielkoordinaten
     }
   });
 });
