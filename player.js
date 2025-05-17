@@ -372,3 +372,22 @@ blackOverlay.addEventListener('click', function (e) {
   const y = ((e.clientY - rect.top) / hiddenImage.height).toFixed(4);
   socket.emit('imageAnswer', { x: parseFloat(x), y: parseFloat(y) });
 });
+
+// Neue Funktion: Spieler-Klickbereiche anzeigen
+socket.on('revealClicksToAll', (clicks) => {
+  clicks.forEach(({ x, y, name }) => {
+    const marker = document.createElement('div');
+    marker.className = 'click-marker';
+    marker.style.position = 'absolute';
+    marker.style.left = `${x * 100}%`;
+    marker.style.top = `${y * 100}%`;
+    marker.style.width = '20px';
+    marker.style.height = '20px';
+    marker.style.borderRadius = '50%';
+    marker.style.background = 'lime';
+    marker.title = name;
+    marker.style.transform = 'translate(-50%, -50%)';
+    marker.style.zIndex = '9999';
+    document.body.appendChild(marker);
+  });
+});
