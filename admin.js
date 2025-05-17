@@ -9,6 +9,7 @@ const roomCodeEl = document.getElementById('room-code');
 const wrongQuestionsList = document.getElementById('wrong-questions-list');
 const estimateList = document.getElementById('estimate-list');
 const correctEstimateInput = document.getElementById('correct-estimate');
+const manualDarkenBtn = document.getElementById('btn-manual-darken');
 
 let currentBuzzer = null;
 let estimates = [];
@@ -84,6 +85,12 @@ socket.on('showPreviewImage', ({ imageUrl }) => {
     }
   }, 1000);
 });
+
+if (manualDarkenBtn) {
+  manualDarkenBtn.addEventListener('click', () => {
+    socket.emit('darkenImageManually');
+  });
+}
 socket.on('playerBuzzed', (player) => {
   currentBuzzer = player;
   buzzerInfo.innerHTML = `
