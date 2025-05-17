@@ -1,3 +1,4 @@
+// ✅ server.js mit Klicksperre für Memory-Bilder
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -20,6 +21,7 @@ let buzzerLocked = false;
 let globalQuestionIndex = 0;
 let roomCode = Math.floor(1000 + Math.random() * 9000);
 let currentImageTarget = null;
+let memoryClicks = new Set(); // NEU
 
 if (fs.existsSync(QUESTIONS_FILE)) {
   try {
@@ -95,6 +97,7 @@ io.on('connection', (socket) => {
       });
 
       buzzerLocked = false;
+      memoryClicks.clear(); // NEU
 
       if (q.type === 'memory' && q.imageUrl && q.solution) {
         io.emit('showPreviewImage', { imageUrl: q.imageUrl });
@@ -182,9 +185,9 @@ io.on('connection', (socket) => {
     io.emit('revealSingleOption', letter);
   });
 
- socket.on('requestImageReveal', ({ imageUrl }) => {
-  socket.emit('showPreviewImage', { imageUrl });
-});
+  socket.on('requestImageReveal', ({ imageUrl }) => {
+    socket.emit('showPreviewImage', { imageUrl });
+  });
 
   socket.on('disconnect', () => {
     players = players.filter(p => p.id !== socket.id);
@@ -215,6 +218,12 @@ io.on('connection', (socket) => {
   });
 
   socket.on('imageAnswer', ({ x, y }) => {
+    if (memoryClicks.has(socket.id)) {
+      console.log(`🚫 ${socket.id} hat bereits geklickt.`);
+      return;
+    }
+    memoryClicks.add(socket.id);
+
     const player = players.find(p => p.id === socket.id);
     if (player) {
       console.log(`🖼️ ${player.name} klickte bei X: ${(x * 100).toFixed(1)}%, Y: ${(y * 100).toFixed(1)}%`);
