@@ -182,12 +182,9 @@ io.on('connection', (socket) => {
     io.emit('revealSingleOption', letter);
   });
 
-  socket.on('requestImageReveal', ({ imageUrl }) => {
-    socket.emit('showPreviewImage', { imageUrl });
-    setTimeout(() => {
-      socket.emit('showDarkenedImage', { imageUrl });
-    }, 3000);
-  });
+ socket.on('requestImageReveal', ({ imageUrl }) => {
+  socket.emit('showPreviewImage', { imageUrl });
+});
 
   socket.on('disconnect', () => {
     players = players.filter(p => p.id !== socket.id);
