@@ -56,7 +56,6 @@ socket.on('connect', () => {
 socket.on('question', (data) => {
   questionText.textContent = data.question;
 
-  // 📸 Wenn es sich um ein Bilderrätsel (memory) handelt, Bild anzeigen
   if (data.type === 'memory') {
     if (data.imageUrl) {
       socket.emit('requestImageReveal', { imageUrl: data.imageUrl });
@@ -138,6 +137,7 @@ socket.on('updatePlayers', (players) => {
 
   updateBuzzState();
 });
+
 buzzerBtn.addEventListener('click', () => {
   if (!hasBuzzed) {
     socket.emit('buzz');
@@ -254,7 +254,6 @@ function updateBuzzState() {
   });
 }
 
-// 🔓 Antwortoption freigeben
 socket.on('revealSingleOption', (letter) => {
   const btn = answerButtons[letter];
   if (btn && currentOptions[letter]) {
@@ -265,7 +264,6 @@ socket.on('revealSingleOption', (letter) => {
   }
 });
 
-// 🏆 Gewinneranzeige animiert + Sound
 socket.on('announceWinner', ({ name, points }) => {
   const box = document.createElement('div');
   box.className = 'winner-box';
@@ -299,7 +297,6 @@ socket.on('announceWinner', ({ name, points }) => {
   document.head.appendChild(style);
 });
 
-// 📸 Bilderrätsel-Klicksystem
 const imageQuizArea = document.getElementById('image-quiz-area');
 const quizImage = document.getElementById('quiz-image');
 
@@ -332,17 +329,41 @@ const hiddenImageArea = document.getElementById('hidden-image-area');
 const hiddenImage = document.getElementById('hidden-image');
 const blackOverlay = document.getElementById('black-overlay');
 
+let memoryCountdownInterval = null;
+
 socket.on('showPreviewImage', ({ imageUrl }) => {
   previewImage.src = imageUrl;
   previewImageArea.style.display = 'block';
   hiddenImageArea.style.display = 'none';
   imageQuizArea.style.display = 'none';
+
+  const memoryTimer = document.getElementById('memory-timer');
+  if (memoryTimer) {
+    let seconds = 20;
+    memoryTimer.textContent = `⏳ Noch ${seconds} Sekunden...`;
+    clearInterval(memoryCountdownInterval);
+    memoryCountdownInterval = setInterval(() => {
+      seconds--;
+      if (seconds > 0) {
+        memoryTimer.textContent = `⏳ Noch ${seconds} Sekunden...`;
+      } else {
+        memoryTimer.textContent = '';
+        clearInterval(memoryCountdownInterval);
+      }
+    }, 1000);
+  }
 });
 
 socket.on('showDarkenedImage', ({ imageUrl }) => {
   previewImageArea.style.display = 'none';
   hiddenImage.src = imageUrl;
   hiddenImageArea.style.display = 'block';
+
+  const memoryTimer = document.getElementById('memory-timer');
+  if (memoryTimer) {
+    memoryTimer.textContent = '';
+    clearInterval(memoryCountdownInterval);
+  }
 });
 
 blackOverlay.addEventListener('click', function (e) {
