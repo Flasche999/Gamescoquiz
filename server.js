@@ -1,4 +1,3 @@
-// ✅ server.js mit Klicksperre für Memory-Bilder
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -21,7 +20,7 @@ let buzzerLocked = false;
 let globalQuestionIndex = 0;
 let roomCode = Math.floor(1000 + Math.random() * 9000);
 let currentImageTarget = null;
-let memoryClicks = new Set(); // NEU
+let memoryClicks = new Set();
 
 if (fs.existsSync(QUESTIONS_FILE)) {
   try {
@@ -97,7 +96,7 @@ io.on('connection', (socket) => {
       });
 
       buzzerLocked = false;
-      memoryClicks.clear(); // NEU
+      memoryClicks.clear();
 
       if (q.type === 'memory' && q.imageUrl && q.solution) {
         io.emit('showPreviewImage', { imageUrl: q.imageUrl });
@@ -217,34 +216,32 @@ io.on('connection', (socket) => {
     io.emit('showDarkenedImage', { imageUrl });
   });
 
+  socket.on('darkenImageManually', () => {
+    if (questionDB[globalQuestionIndex - 1]?.imageUrl) {
+      io.emit('showDarkenedImage', { imageUrl: questionDB[globalQuestionIndex - 1].imageUrl });
+      currentImageTarget = questionDB[globalQuestionIndex - 1].solution || null;
+    }
+  });
+
   socket.on('imageAnswer', ({ x, y }) => {
     if (memoryClicks.has(socket.id)) {
-      console.log(`🚫 ${socket.id} hat bereits geklickt.`);
+      console.log(`🚫 Spieler ${socket.id} hat bereits geklickt.`);
       return;
     }
     memoryClicks.add(socket.id);
 
     const player = players.find(p => p.id === socket.id);
-    if (player) {
+    if (player && currentImageTarget) {
       console.log(`🖼️ ${player.name} klickte bei X: ${(x * 100).toFixed(1)}%, Y: ${(y * 100).toFixed(1)}%`);
-      if (currentImageTarget) {
-        const { x: tx, y: ty, tolerance } = currentImageTarget;
-        const isCorrect = Math.abs(x - tx) <= tolerance && Math.abs(y - ty) <= tolerance;
-        if (isCorrect) {
-          player.points += 3;
-          socket.emit('playCorrectSound');
-        } else {
-          socket.emit('playWrongSound');
-        }
-        io.emit('updatePlayers', players);
+      const { x: tx, y: ty, tolerance } = currentImageTarget;
+      const isCorrect = Math.abs(x - tx) <= tolerance && Math.abs(y - ty) <= tolerance;
+      if (isCorrect) {
+        player.points += 3;
+        socket.emit('playCorrectSound');
+      } else {
+        socket.emit('playWrongSound');
       }
-    }
-  });
-
-  socket.on('darkenImageManually', () => {
-    if (questionDB[globalQuestionIndex - 1]?.imageUrl) {
-      io.emit('showDarkenedImage', { imageUrl: questionDB[globalQuestionIndex - 1].imageUrl });
-      currentImageTarget = questionDB[globalQuestionIndex - 1].solution || null;
+      io.emit('updatePlayers', players);
     }
   });
 });
