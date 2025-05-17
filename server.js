@@ -82,7 +82,6 @@ io.on('connection', (socket) => {
     io.emit('questionAdded', newQ);
   });
 
-  // ✅ NEU: Erweiterte nextQuestion mit Memory-Unterstützung
   socket.on('nextQuestion', () => {
     if (questionDB.length > 0 && globalQuestionIndex < questionDB.length) {
       const q = questionDB[globalQuestionIndex];
@@ -97,7 +96,6 @@ io.on('connection', (socket) => {
 
       buzzerLocked = false;
 
-      // 🧠 Memory-Bilderrätsel
       if (q.type === 'memory' && q.imageUrl && q.solution) {
         io.emit('showPreviewImage', { imageUrl: q.imageUrl });
 
@@ -105,10 +103,7 @@ io.on('connection', (socket) => {
           io.emit('showDarkenedImage', { imageUrl: q.imageUrl });
           currentImageTarget = q.solution;
         }, 5000);
-      }
-
-      // 📷 Klassisches Bilderrätsel mit Klick
-      else if (q.type === 'image' && q.imageUrl) {
+      } else if (q.type === 'image' && q.imageUrl) {
         io.emit('showImageQuestion', { imageUrl: q.imageUrl });
         currentImageTarget = q.solution || null;
       } else {
@@ -192,6 +187,14 @@ io.on('connection', (socket) => {
     io.emit('revealSingleOption', letter);
   });
 
+  // 🧠 NEU: Memory-Vorschau auf Anfrage anzeigen
+  socket.on('requestImageReveal', ({ imageUrl }) => {
+    socket.emit('showPreviewImage', { imageUrl });
+    setTimeout(() => {
+      socket.emit('showDarkenedImage', { imageUrl });
+    }, 3000);
+  });
+
   socket.on('disconnect', () => {
     players = players.filter(p => p.id !== socket.id);
     io.emit('updatePlayers', players);
@@ -204,7 +207,6 @@ io.on('connection', (socket) => {
   socket.on('pauseMusic', () => io.emit('pauseMusic'));
   socket.on('setVolume', (volume) => io.emit('setVolume', volume));
 
-  // 📸 Bilderrätsel anzeigen
   socket.on('showImageQuestion', ({ imageUrl }) => {
     io.emit('showImageQuestion', { imageUrl });
   });
@@ -213,7 +215,6 @@ io.on('connection', (socket) => {
     io.emit('hideImageQuestion');
   });
 
-  // 🧠 Memory-Bilderrätsel
   socket.on('showPreviewImage', ({ imageUrl }) => {
     io.emit('showPreviewImage', { imageUrl });
   });
@@ -226,7 +227,6 @@ io.on('connection', (socket) => {
     const player = players.find(p => p.id === socket.id);
     if (player) {
       console.log(`🖼️ ${player.name} klickte bei X: ${(x * 100).toFixed(1)}%, Y: ${(y * 100).toFixed(1)}%`);
-      // Vergleiche mit currentImageTarget
       if (currentImageTarget) {
         const { x: tx, y: ty, tolerance } = currentImageTarget;
         const isCorrect = Math.abs(x - tx) <= tolerance && Math.abs(y - ty) <= tolerance;
