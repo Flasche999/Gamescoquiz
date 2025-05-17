@@ -291,3 +291,30 @@ socket.on('announceWinner', ({ name, points }) => {
   `;
   document.head.appendChild(style);
 });
+
+// 📸 Bilderrätsel-Klicksystem
+const imageQuizArea = document.getElementById('image-quiz-area');
+const quizImage = document.getElementById('quiz-image');
+
+if (quizImage) {
+  quizImage.addEventListener('click', function (e) {
+    const rect = quizImage.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const relativeX = x / quizImage.width;
+    const relativeY = y / quizImage.height;
+
+    socket.emit('imageAnswer', { x: relativeX, y: relativeY });
+  });
+}
+
+socket.on('showImageQuestion', ({ imageUrl }) => {
+  imageQuizArea.style.display = 'block';
+  quizImage.src = imageUrl;
+});
+
+socket.on('hideImageQuestion', () => {
+  imageQuizArea.style.display = 'none';
+  quizImage.src = '';
+});
