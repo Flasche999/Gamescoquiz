@@ -6,18 +6,12 @@ const currentQuestion = document.getElementById('current-question');
 const correctAnswer = document.getElementById('correct-answer');
 const nextQuestionBtn = document.getElementById('next-question-btn');
 const roomCodeEl = document.getElementById('room-code');
-
-const categoryInput = document.getElementById('question-category');
-const newQuestionInput = document.getElementById('new-question');
-const newAnswerInput = document.getElementById('new-answer');
-const addQuestionBtn = document.getElementById('add-question-btn');
 const wrongQuestionsList = document.getElementById('wrong-questions-list');
+const estimateList = document.getElementById('estimate-list');
+const correctEstimateInput = document.getElementById('correct-estimate');
 
 let currentBuzzer = null;
 let estimates = [];
-
-const estimateList = document.getElementById('estimate-list');
-const correctEstimateInput = document.getElementById('correct-estimate');
 
 socket.on('roomCode', (code) => {
   roomCodeEl.textContent = code;
@@ -64,7 +58,6 @@ socket.on('question', (data) => {
   estimates = [];
 });
 
-// Countdown bei Memory-Vorschau
 socket.on('showPreviewImage', ({ imageUrl }) => {
   const timerBox = document.createElement('div');
   timerBox.id = 'countdown-timer';
@@ -91,7 +84,6 @@ socket.on('showPreviewImage', ({ imageUrl }) => {
     }
   }, 1000);
 });
-
 socket.on('playerBuzzed', (player) => {
   currentBuzzer = player;
   buzzerInfo.innerHTML = `
@@ -141,35 +133,6 @@ function addWrongQuestion(text) {
   wrongQuestionsList.appendChild(li);
 }
 
-addQuestionBtn.addEventListener('click', () => {
-  const category = categoryInput.value.trim();
-  const question = newQuestionInput.value.trim();
-  const answerA = document.getElementById('answer-a').value.trim();
-  const answerB = document.getElementById('answer-b').value.trim();
-  const answerC = document.getElementById('answer-c').value.trim();
-  const answerD = document.getElementById('answer-d').value.trim();
-  const correctAnswer = newAnswerInput.value.trim().toUpperCase();
-
-  if (category && question && answerA && answerB && answerC && answerD && correctAnswer) {
-    socket.emit('addQuestion', {
-      category,
-      question,
-      options: { A: answerA, B: answerB, C: answerC, D: answerD },
-      answer: correctAnswer
-    });
-
-    categoryInput.value = '';
-    newQuestionInput.value = '';
-    document.getElementById('answer-a').value = '';
-    document.getElementById('answer-b').value = '';
-    document.getElementById('answer-c').value = '';
-    document.getElementById('answer-d').value = '';
-    newAnswerInput.value = '';
-  } else {
-    alert("Bitte alle Felder ausfüllen (inkl. Optionen A–D und richtige Antwort)");
-  }
-});
-
 nextQuestionBtn.addEventListener('click', () => {
   socket.emit('nextQuestion');
 });
@@ -177,7 +140,6 @@ nextQuestionBtn.addEventListener('click', () => {
 function updatePlayers() {
   socket.emit('requestUpdate');
 }
-
 function playMusic() {
   socket.emit('playMusic');
 }
@@ -237,7 +199,6 @@ socket.on('clearAnswerHighlight', () => {
   });
   document.getElementById('buzzed-answer').innerHTML = 'Ausgewählte Antwort: <strong>---</strong>';
 });
-
 socket.on('estimateReceived', ({ playerId, name, value }) => {
   if (!estimateList) return;
 
@@ -317,7 +278,6 @@ function markClosestEstimate() {
 function unlockEstimateInputs() {
   socket.emit('unlockEstimate');
 }
-
 const showWinnerBtn = document.getElementById('show-winner-btn');
 if (showWinnerBtn) {
   showWinnerBtn.addEventListener('click', () => {
@@ -405,50 +365,6 @@ function revealSingleOption(letter) {
 
 function revealOption(letter) {
   const container = document.getElementById(`option-${letter.toLowerCase()}-container`);
-  if(container) container.style.display = 'block';
+  if (container) container.style.display = 'block';
   socket.emit('revealSingleOption', letter);
 }
-
-// 📸 Bilderrätsel
-const imageUrlInput = document.getElementById('image-url-input');
-const sendImageBtn = document.getElementById('send-image-question-btn');
-const hideImageBtn = document.getElementById('hide-image-question-btn');
-
-if (sendImageBtn && hideImageBtn && imageUrlInput) {
-  sendImageBtn.addEventListener('click', () => {
-    const imageUrl = imageUrlInput.value.trim();
-    if (imageUrl) {
-      socket.emit('showImageQuestion', { imageUrl });
-    } else {
-      alert("❗ Bitte eine Bild-URL eingeben!");
-    }
-  });
-
-  hideImageBtn.addEventListener('click', () => {
-    socket.emit('hideImageQuestion');
-  });
-}
-
-// 🧠 Memory-Logik + MANUELLES Abdunkeln
-const memoryUrlInput = document.getElementById('memory-image-url');
-const btnShowPreview = document.getElementById('btn-show-preview');
-const btnShowBlack = document.getElementById('btn-show-black');
-const btnManualDarken = document.getElementById('btn-manual-darken'); // NEU
-
-btnShowPreview?.addEventListener('click', () => {
-  const imageUrl = memoryUrlInput.value.trim();
-  if (imageUrl) {
-    socket.emit('showPreviewImage', { imageUrl });
-  }
-});
-
-btnShowBlack?.addEventListener('click', () => {
-  const imageUrl = memoryUrlInput.value.trim();
-  if (imageUrl) {
-    socket.emit('showDarkenedImage', { imageUrl });
-  }
-});
-
-btnManualDarken?.addEventListener('click', () => {
-  socket.emit('darkenImageManually');
-});
