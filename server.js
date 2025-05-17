@@ -19,6 +19,7 @@ let questionProgress = {};
 let buzzerLocked = false;
 let globalQuestionIndex = 0;
 let roomCode = Math.floor(1000 + Math.random() * 9000);
+let currentImageTarget = null;
 
 if (fs.existsSync(QUESTIONS_FILE)) {
   try {
@@ -81,6 +82,7 @@ io.on('connection', (socket) => {
     io.emit('questionAdded', newQ);
   });
 
+  // ✅ NEU: Erweiterte nextQuestion mit Memory-Unterstützung
   socket.on('nextQuestion', () => {
     if (questionDB.length > 0 && globalQuestionIndex < questionDB.length) {
       const q = questionDB[globalQuestionIndex];
@@ -94,6 +96,26 @@ io.on('connection', (socket) => {
       });
 
       buzzerLocked = false;
+
+      // 🧠 Memory-Bilderrätsel
+      if (q.type === 'memory' && q.imageUrl && q.solution) {
+        io.emit('showPreviewImage', { imageUrl: q.imageUrl });
+
+        setTimeout(() => {
+          io.emit('showDarkenedImage', { imageUrl: q.imageUrl });
+          currentImageTarget = q.solution;
+        }, 5000);
+      }
+
+      // 📷 Klassisches Bilderrätsel mit Klick
+      else if (q.type === 'image' && q.imageUrl) {
+        io.emit('showImageQuestion', { imageUrl: q.imageUrl });
+        currentImageTarget = q.solution || null;
+      } else {
+        io.emit('hideImageQuestion');
+        currentImageTarget = null;
+      }
+
     } else {
       console.log("✅ Alle Fragen wurden gestellt.");
     }
@@ -204,7 +226,18 @@ io.on('connection', (socket) => {
     const player = players.find(p => p.id === socket.id);
     if (player) {
       console.log(`🖼️ ${player.name} klickte bei X: ${(x * 100).toFixed(1)}%, Y: ${(y * 100).toFixed(1)}%`);
-      // Hier könntest du vergleichen mit vorher gespeicherten Zielkoordinaten
+      // Vergleiche mit currentImageTarget
+      if (currentImageTarget) {
+        const { x: tx, y: ty, tolerance } = currentImageTarget;
+        const isCorrect = Math.abs(x - tx) <= tolerance && Math.abs(y - ty) <= tolerance;
+        if (isCorrect) {
+          player.points += 3;
+          socket.emit('playCorrectSound');
+        } else {
+          socket.emit('playWrongSound');
+        }
+        io.emit('updatePlayers', players);
+      }
     }
   });
 });
