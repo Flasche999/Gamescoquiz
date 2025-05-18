@@ -388,6 +388,7 @@ socket.on('revealClicksToAll', (clicks) => {
     marker.title = name;
     marker.style.transform = 'translate(-50%, -50%)';
     marker.style.zIndex = '9999';
-    document.body.appendChild(marker);
+    const overlay = document.getElementById('black-overlay');
+if (overlay) overlay.appendChild(marker);
   });
 });
