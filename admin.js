@@ -362,15 +362,22 @@ socket.on('revealClickPositions', (clicks) => {
   setTimeout(() => {
     overlay.remove();
   }, 10000); // nach 10 Sekunden wieder entfernen
-  socket.on('showMemoryImage', (imgSrc) => {
-  const imgEl = document.getElementById('memory-image');
-  if (imgEl) imgEl.src = imgSrc;
-  socket.on('playerClickedOnMemoryImage', ({ playerName, x, y }) => {
-  const log = document.getElementById('memory-click-log');
-  const entry = document.createElement('div');
-  entry.textContent = `${playerName} klickte auf: X=${x}, Y=${y}`;
-  log.appendChild(entry);
+
+  // ✅ NEU: Memory-Bild anzeigen
+socket.on('showMemoryImage', (imgUrl) => {
+  const img = document.getElementById('memory-image');
+  if (img) img.src = imgUrl;
 });
 
-});
+// ✅ NEU: Klicks auf Bild anzeigen
+socket.on('playerClickedOnMemoryImage', ({ playerName, x, y }) => {
+  const container = document.getElementById('image-click-overlay-admin');
+  const marker = document.createElement('div');
+  marker.classList.add('click-marker');
+  marker.style.left = `${x}%`;
+  marker.style.top = `${y}%`;
+  marker.title = playerName;
+  container.appendChild(marker);
+  });
+
 });
