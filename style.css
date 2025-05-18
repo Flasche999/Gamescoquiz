@@ -190,7 +190,6 @@ button:hover {
   pointer-events: none;
 }
 
-
 .click-marker {
   position: absolute;
   width: 16px;
@@ -200,4 +199,18 @@ button:hover {
   transform: translate(-50%, -50%);
   box-shadow: 0 0 10px red;
   border: 2px solid white;
+}
+
+/* Sichtbare Klickbereiche ohne Klick-Blockade */
+.click-reveal {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  border: 2px solid lime;
+  box-shadow: 0 0 8px lime;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 5;
 }
