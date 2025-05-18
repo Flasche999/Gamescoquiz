@@ -58,14 +58,12 @@ button:hover {
   background: #333;
 }
 
-/* ✅ Rote Markierung für den Spieler, der gebuzzert hat */
 .player-entry.active-buzz {
   background-color: #330000;
   border: 2px solid red;
   box-shadow: 0 0 10px red;
 }
 
-/* ✅ GRÜN für die gewählte Antwort beim Spieler */
 .selected-answer {
   background-color: #00ff00 !important;
   color: black !important;
@@ -73,7 +71,6 @@ button:hover {
   border: 2px solid #0f0;
 }
 
-/* ✅ GRÜN für die gewählte Antwort im Admin-Panel */
 .selected-admin-answer {
   background-color: #00ff00;
   color: black;
@@ -84,7 +81,6 @@ button:hover {
   display: inline-block;
 }
 
-/* ✅ Antwortbuttons Layout */
 .answer-buttons {
   display: flex;
   flex-direction: column;
@@ -108,7 +104,6 @@ button:hover {
   cursor: pointer;
 }
 
-/* 🆕 Gesperrte und freigeschaltete Antwort-Buttons */
 .answer-button.locked {
   background: #111;
   color: #666;
@@ -122,7 +117,6 @@ button:hover {
   font-weight: bold;
 }
 
-/* ✅ Beste Schätzantwort grün markieren */
 .closest {
   background-color: #003300;
   color: #00ff00;
@@ -133,7 +127,6 @@ button:hover {
   border-radius: 6px;
 }
 
-/* ✅ Stil für Schätzfragen-Eingabe */
 #estimate-area {
   background: #111;
   border: 2px dashed #00ffff;
@@ -182,6 +175,10 @@ button:hover {
   height: 100%;
   pointer-events: none;
   z-index: 20;
+}
+
+#black-overlay {
+  position: relative;
 }
 
 .click-marker {
