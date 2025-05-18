@@ -366,7 +366,7 @@ socket.on('showDarkenedImage', ({ imageUrl }) => {
   }
 });
 
-blackOverlay.addEventListener('click', function (e) {
+document.getElementById('click-catcher')?.addEventListener('click', function (e) {
   const rect = hiddenImage.getBoundingClientRect();
   const x = ((e.clientX - rect.left) / hiddenImage.width).toFixed(4);
   const y = ((e.clientY - rect.top) / hiddenImage.height).toFixed(4);
