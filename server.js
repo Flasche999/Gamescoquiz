@@ -102,6 +102,7 @@ io.on('connection', (socket) => {
 
       if (q.type === 'memory' && q.imageUrl && q.solution) {
         io.emit('showPreviewImage', { imageUrl: q.imageUrl });
+        io.emit('showMemoryImage', q.imageUrl); // ✅ Bild auch an Admin senden
         currentImageTarget = q.solution;
       } else if (q.type === 'image' && q.imageUrl) {
         io.emit('showImageQuestion', { imageUrl: q.imageUrl });
@@ -238,6 +239,10 @@ io.on('connection', (socket) => {
       const { x: tx, y: ty, tolerance } = currentImageTarget;
       const isCorrect = Math.abs(x - tx) <= tolerance && Math.abs(y - ty) <= tolerance;
       playerClickMap.set(player.id, { x, y, name: player.name });
+
+      // ✅ Klick auch an Admin-Panel senden
+      io.emit('playerClickedOnMemoryImage', { playerName: player.name, x: x * 100, y: y * 100 });
+
       if (isCorrect) {
         player.points += 3;
         socket.emit('playCorrectSound');
@@ -251,16 +256,16 @@ io.on('connection', (socket) => {
   socket.on('requestRevealClicks', () => {
     const allClicks = Array.from(playerClickMap.values());
     io.emit('revealClicksToAll', allClicks);
-    socket.on('memoryClick', ({ playerName, x, y }) => {
-  console.log(`🖱️ ${playerName} klickte auf: X=${x}, Y=${y}`);
-  
-  // Merke den Klick (z. B. fürs spätere Auswerten)
-  playerClickMap.set(playerName, { x, y });
+  });
 
-  // Sende Info an Admin-Panel
-  io.emit('playerClickedOnMemoryImage', { playerName, x, y });
-});
+  // ✅ Bild manuell anzeigen (optional extern triggert)
+  socket.on('showMemoryImage', ({ imageUrl }) => {
+    io.emit('showMemoryImage', imageUrl);
+  });
 
+  // ✅ Klickposition direkt übertragen (optional extern triggert)
+  socket.on('imageClick', ({ playerId, name, x, y }) => {
+    io.emit('playerClickedOnMemoryImage', { playerName: name, x: x * 100, y: y * 100 });
   });
 });
 
