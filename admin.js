@@ -37,28 +37,34 @@ socket.on('updatePlayers', (players) => {
 });
 
 socket.on('revealClickPositions', (clicks) => {
-  const overlay = document.getElementById('black-overlay');
-  if (!overlay) return;
+  const overlay = document.createElement('div');
+  overlay.id = 'click-overlay';
+  overlay.style.position = 'fixed';
+  overlay.style.top = 0;
+  overlay.style.left = 0;
+  overlay.style.width = '100%';
+  overlay.style.height = '100%';
+  overlay.style.pointerEvents = 'none';
+  overlay.style.zIndex = 9998;
 
-  // Alte Marker entfernen
-  overlay.querySelectorAll('.click-marker').forEach(el => el.remove());
-
-  clicks.forEach(({ x, y, name }) => {
+  clicks.forEach(({ x, y }) => {
     const dot = document.createElement('div');
-    dot.className = 'click-marker';
-    dot.title = name;
     dot.style.position = 'absolute';
     dot.style.width = '20px';
     dot.style.height = '20px';
-    dot.style.backgroundColor = 'lime';
+    dot.style.backgroundColor = 'red';
     dot.style.borderRadius = '50%';
-    dot.style.border = '2px solid white';
-    dot.style.boxShadow = '0 0 10px lime';
-    dot.style.left = `${x * 100}%`;
-    dot.style.top = `${y * 100}%`;
+    dot.style.left = `${x}%`;
+    dot.style.top = `${y}%`;
     dot.style.transform = 'translate(-50%, -50%)';
     overlay.appendChild(dot);
   });
+
+  document.body.appendChild(overlay);
+
+  setTimeout(() => {
+    overlay.remove();
+  }, 10000);
 });
 
 document.getElementById('btn-reveal-clicks')?.addEventListener('click', () => {
@@ -328,48 +334,13 @@ function revealOption(letter) {
   socket.emit('revealSingleOption', letter);
 }
 
-// ✅ NEU: Klickpositionen im Memory anzeigen
-document.getElementById('btn-reveal-clicks')?.addEventListener('click', () => {
-  socket.emit('requestRevealClicks');
-});
-
-socket.on('revealClickPositions', (clicks) => {
-  const overlay = document.createElement('div');
-  overlay.id = 'click-overlay';
-  overlay.style.position = 'fixed';
-  overlay.style.top = 0;
-  overlay.style.left = 0;
-  overlay.style.width = '100%';
-  overlay.style.height = '100%';
-  overlay.style.pointerEvents = 'none';
-  overlay.style.zIndex = 9998;
-
-  clicks.forEach(({ x, y }) => {
-    const dot = document.createElement('div');
-    dot.style.position = 'absolute';
-    dot.style.width = '20px';
-    dot.style.height = '20px';
-    dot.style.backgroundColor = 'red';
-    dot.style.borderRadius = '50%';
-    dot.style.left = `${x * 100}%`;
-    dot.style.top = `${y * 100}%`;
-    dot.style.transform = 'translate(-50%, -50%)';
-    overlay.appendChild(dot);
-  });
-
-  document.body.appendChild(overlay);
-
-  setTimeout(() => {
-    overlay.remove();
-  }, 10000); // nach 10 Sekunden wieder entfernen
-
-  // ✅ NEU: Memory-Bild anzeigen
+// ✅ Memory-Bild im Admin anzeigen
 socket.on('showMemoryImage', (imgUrl) => {
   const img = document.getElementById('memory-image');
   if (img) img.src = imgUrl;
 });
 
-// ✅ NEU: Klicks auf Bild anzeigen
+// ✅ Klicks auf Memory-Bild anzeigen
 socket.on('playerClickedOnMemoryImage', ({ playerName, x, y }) => {
   const container = document.getElementById('image-click-overlay-admin');
   const marker = document.createElement('div');
@@ -378,6 +349,4 @@ socket.on('playerClickedOnMemoryImage', ({ playerName, x, y }) => {
   marker.style.top = `${y}%`;
   marker.title = playerName;
   container.appendChild(marker);
-  });
-
 });
