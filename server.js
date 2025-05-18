@@ -248,7 +248,7 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('revealPlayerClicks', () => {
+  socket.on('requestRevealClicks', () => {
     const allClicks = Array.from(playerClickMap.values());
     io.emit('revealClicksToAll', allClicks);
   });
