@@ -375,55 +375,40 @@ blackOverlay.addEventListener('click', function (e) {
 
 // Neue Funktion: Spieler-Klickbereiche anzeigen
 socket.on('revealClicksToAll', (clicks) => {
-  const svgNS = "http://www.w3.org/2000/svg";
-  const svg = document.createElementNS(svgNS, 'svg');
-  svg.setAttribute('width', '100%');
-  svg.setAttribute('height', '100%');
-  svg.style.position = 'absolute';
-  svg.style.top = '0';
-  svg.style.left = '0';
-  svg.style.zIndex = '9999';
-  svg.style.pointerEvents = 'none';
-
-  const defs = document.createElementNS(svgNS, 'defs');
-  const maskEl = document.createElementNS(svgNS, 'mask');
-  maskEl.setAttribute('id', 'reveal-mask');
-
-  const fullRect = document.createElementNS(svgNS, 'rect');
-  fullRect.setAttribute('x', '0');
-  fullRect.setAttribute('y', '0');
-  fullRect.setAttribute('width', '100%');
-  fullRect.setAttribute('height', '100%');
-  fullRect.setAttribute('fill', 'black');
-  maskEl.appendChild(fullRect);
-
-  clicks.forEach(({ x, y }) => {
-    const cx = `${x * 100}%`;
-    const cy = `${y * 100}%`;
-
-    const circle = document.createElementNS(svgNS, 'circle');
-    circle.setAttribute('cx', cx);
-    circle.setAttribute('cy', cy);
-    circle.setAttribute('r', '4%');
-    circle.setAttribute('fill', 'white');
-    maskEl.appendChild(circle);
-  });
-
-  defs.appendChild(maskEl);
-  svg.appendChild(defs);
-
-  const overlayRect = document.createElementNS(svgNS, 'rect');
-  overlayRect.setAttribute('x', '0');
-  overlayRect.setAttribute('y', '0');
-  overlayRect.setAttribute('width', '100%');
-  overlayRect.setAttribute('height', '100%');
-  overlayRect.setAttribute('fill', 'black');
-  overlayRect.setAttribute('mask', 'url(#reveal-mask)');
-  svg.appendChild(overlayRect);
-
   const overlay = document.getElementById('black-overlay');
-  if (overlay) {
-    overlay.innerHTML = '';
-    overlay.appendChild(svg);
-  }
+  if (!overlay) return;
+
+  clicks.forEach(({ x, y, name }) => {
+    const revealSpot = document.createElement('div');
+    revealSpot.className = 'click-marker';
+    revealSpot.style.position = 'absolute';
+    revealSpot.style.left = `${x * 100}%`;
+    revealSpot.style.top = `${y * 100}%`;
+    revealSpot.style.width = '40px';
+    revealSpot.style.height = '40px';
+    revealSpot.style.borderRadius = '50%';
+    revealSpot.style.boxShadow = '0 0 8px lime';
+    revealSpot.style.border = '2px solid white';
+    revealSpot.style.background = 'transparent';
+    revealSpot.style.zIndex = '9999';
+    revealSpot.title = name;
+    revealSpot.style.backdropFilter = 'brightness(200%)';
+    revealSpot.style.pointerEvents = 'none';
+
+    // Um "Loch" im schwarzen Overlay zu simulieren
+    const hole = document.createElement('div');
+    hole.style.position = 'absolute';
+    hole.style.left = `${x * 100}%`;
+    hole.style.top = `${y * 100}%`;
+    hole.style.width = '40px';
+    hole.style.height = '40px';
+    hole.style.transform = 'translate(-50%, -50%)';
+    hole.style.borderRadius = '50%';
+    hole.style.background = 'transparent';
+    hole.style.mixBlendMode = 'destination-out';
+    hole.style.zIndex = '9998';
+
+    overlay.appendChild(hole);
+    overlay.appendChild(revealSpot);
+  });
 });
