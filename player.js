@@ -395,7 +395,6 @@ socket.on('revealClicksToAll', (clicks) => {
     revealSpot.style.backdropFilter = 'brightness(200%)';
     revealSpot.style.pointerEvents = 'none';
 
-    // Um "Loch" im schwarzen Overlay zu simulieren
     const hole = document.createElement('div');
     hole.style.position = 'absolute';
     hole.style.left = `${x * 100}%`;
@@ -404,7 +403,7 @@ socket.on('revealClicksToAll', (clicks) => {
     hole.style.height = '40px';
     hole.style.transform = 'translate(-50%, -50%)';
     hole.style.borderRadius = '50%';
-    hole.style.background = 'transparent';
+    hole.style.background = 'black';
     hole.style.mixBlendMode = 'destination-out';
     hole.style.zIndex = '9998';
 
