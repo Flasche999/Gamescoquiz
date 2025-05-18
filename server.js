@@ -251,6 +251,16 @@ io.on('connection', (socket) => {
   socket.on('requestRevealClicks', () => {
     const allClicks = Array.from(playerClickMap.values());
     io.emit('revealClicksToAll', allClicks);
+    socket.on('memoryClick', ({ playerName, x, y }) => {
+  console.log(`🖱️ ${playerName} klickte auf: X=${x}, Y=${y}`);
+  
+  // Merke den Klick (z. B. fürs spätere Auswerten)
+  playerClickMap.set(playerName, { x, y });
+
+  // Sende Info an Admin-Panel
+  io.emit('playerClickedOnMemoryImage', { playerName, x, y });
+});
+
   });
 });
 
