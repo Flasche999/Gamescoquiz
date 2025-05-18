@@ -36,6 +36,35 @@ socket.on('updatePlayers', (players) => {
   });
 });
 
+socket.on('revealClickPositions', (clicks) => {
+  const overlay = document.getElementById('black-overlay');
+  if (!overlay) return;
+
+  // Alte Marker entfernen
+  overlay.querySelectorAll('.click-marker').forEach(el => el.remove());
+
+  clicks.forEach(({ x, y, name }) => {
+    const dot = document.createElement('div');
+    dot.className = 'click-marker';
+    dot.title = name;
+    dot.style.position = 'absolute';
+    dot.style.width = '20px';
+    dot.style.height = '20px';
+    dot.style.backgroundColor = 'lime';
+    dot.style.borderRadius = '50%';
+    dot.style.border = '2px solid white';
+    dot.style.boxShadow = '0 0 10px lime';
+    dot.style.left = `${x * 100}%`;
+    dot.style.top = `${y * 100}%`;
+    dot.style.transform = 'translate(-50%, -50%)';
+    overlay.appendChild(dot);
+  });
+});
+
+document.getElementById('btn-reveal-clicks')?.addEventListener('click', () => {
+  socket.emit('requestRevealClicks');
+});
+
 socket.on('question', (data) => {
   ['a','b','c','d'].forEach(letter => {
     const container = document.getElementById(`option-${letter}-container`);
