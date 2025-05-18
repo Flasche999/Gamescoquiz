@@ -378,36 +378,24 @@ socket.on('revealClicksToAll', (clicks) => {
   const overlay = document.getElementById('black-overlay');
   if (!overlay) return;
 
+  // Bestehende Marker entfernen
+  overlay.querySelectorAll('.click-reveal').forEach(el => el.remove());
+
   clicks.forEach(({ x, y, name }) => {
     const revealSpot = document.createElement('div');
-    revealSpot.className = 'click-marker';
+    revealSpot.className = 'click-reveal';
     revealSpot.style.position = 'absolute';
     revealSpot.style.left = `${x * 100}%`;
     revealSpot.style.top = `${y * 100}%`;
-    revealSpot.style.width = '40px';
-    revealSpot.style.height = '40px';
+    revealSpot.style.width = '60px';
+    revealSpot.style.height = '60px';
+    revealSpot.style.transform = 'translate(-50%, -50%)';
     revealSpot.style.borderRadius = '50%';
-    revealSpot.style.boxShadow = '0 0 8px lime';
-    revealSpot.style.border = '2px solid white';
-    revealSpot.style.background = 'transparent';
-    revealSpot.style.zIndex = '9999';
-    revealSpot.title = name;
-    revealSpot.style.backdropFilter = 'brightness(200%)';
+    revealSpot.style.background = 'rgba(255,255,255,0.05)'; // sichtbar, aber klickbar
+    revealSpot.style.border = '2px solid lime';
     revealSpot.style.pointerEvents = 'none';
-
-    const hole = document.createElement('div');
-    hole.style.position = 'absolute';
-    hole.style.left = `${x * 100}%`;
-    hole.style.top = `${y * 100}%`;
-    hole.style.width = '40px';
-    hole.style.height = '40px';
-    hole.style.transform = 'translate(-50%, -50%)';
-    hole.style.borderRadius = '50%';
-    hole.style.background = 'black';
-    hole.style.mixBlendMode = 'destination-out';
-    hole.style.zIndex = '9998';
-
-    overlay.appendChild(hole);
+    revealSpot.title = name;
+    revealSpot.style.zIndex = '5';
     overlay.appendChild(revealSpot);
   });
 });
