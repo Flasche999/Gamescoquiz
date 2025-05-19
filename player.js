@@ -380,6 +380,8 @@ socket.on('revealClicksToAll', (clicks) => {
 
   // Bestehende Marker entfernen
   overlay.querySelectorAll('.click-reveal').forEach(el => el.remove());
+  // Alte Löcher entfernen
+  overlay.querySelectorAll('.click-hole').forEach(el => el.remove());
 
   clicks.forEach(({ x, y, name }) => {
     const revealSpot = document.createElement('div');
@@ -397,5 +399,12 @@ socket.on('revealClicksToAll', (clicks) => {
     revealSpot.title = name;
     revealSpot.style.zIndex = '5';
     overlay.appendChild(revealSpot);
-  });
+      clicks.forEach(({ x, y, name }) => {
+    const hole = document.createElement('div');
+    hole.className = 'click-hole';
+    hole.style.left = `${x * 100}%`;
+    hole.style.top = `${y * 100}%`;
+    overlay.appendChild(hole);
+      });
 });
+  });
