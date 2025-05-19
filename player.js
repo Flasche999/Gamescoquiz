@@ -377,9 +377,7 @@ document.getElementById('click-catcher')?.addEventListener('click', function (e)
 socket.on('revealClicksToAll', (clicks) => {
   const overlay = document.getElementById('black-overlay');
   if (!overlay) return;
-
-  // Bestehende Marker entfernen
-  overlay.querySelectorAll('.click-reveal').forEach(el => el.remove());
+  
   // Alte Löcher entfernen
   overlay.querySelectorAll('.click-hole').forEach(el => el.remove());
 
