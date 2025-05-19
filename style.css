@@ -223,3 +223,16 @@ button:hover {
   pointer-events: none;
   z-index: 5;
 }
+
+.click-hole {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: black;
+  mix-blend-mode: destination-out;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 11;
+}
+
