@@ -377,7 +377,22 @@ document.getElementById('click-catcher')?.addEventListener('click', function (e)
 socket.on('revealClicksToAll', (clicks) => {
   const overlay = document.getElementById('black-overlay');
   if (!overlay) return;
-  
+
+  // Baue SVG-Maske mit kreisförmigen Löchern
+  let svgMask = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <mask id="clickMask">
+        <rect width="100%" height="100%" fill="white"/>
+        ${clicks.map(({ x, y }) => `
+          <circle cx="${x * 100}%" cy="${y * 100}%" r="3%" fill="black"/>`
+        ).join('')}
+      </mask>
+      <rect width="100%" height="100%" fill="black" mask="url(#clickMask)" />
+    </svg>
+  `;
+
+  const encoded = 'data:image/svg+xml;base64,' + btoa(svgMask);
+
   // Alte Löcher entfernen
   overlay.querySelectorAll('.click-hole').forEach(el => el.remove());
 
@@ -403,6 +418,8 @@ socket.on('revealClicksToAll', (clicks) => {
     hole.style.left = `${x * 100}%`;
     hole.style.top = `${y * 100}%`;
     overlay.appendChild(hole);
+      overlay.style.webkitMaskImage = `url('${encoded}')`;
+  overlay.style.maskImage = `url('${encoded}')`;
       });
 });
   });
