@@ -364,6 +364,22 @@ socket.on('showDarkenedImage', ({ imageUrl }) => {
     memoryTimer.textContent = '';
     clearInterval(memoryCountdownInterval);
   }
+    // Frage jetzt sichtbar machen
+  const questionArea = document.getElementById('question-text');
+  if (questionArea) {
+    questionArea.style.display = 'block'; // oder = 'inline' je nach Layout
+  }
+
+  const metaArea = document.getElementById('question-meta');
+  if (metaArea) {
+    metaArea.style.display = 'block';
+  }
+
+  const counterArea = document.getElementById('question-counter');
+  if (counterArea) {
+    counterArea.style.display = 'block';
+  }
+
 });
 
 document.getElementById('click-catcher')?.addEventListener('click', function (e) {
