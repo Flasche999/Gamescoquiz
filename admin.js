@@ -340,7 +340,6 @@ socket.on('showMemoryImage', (imgUrl) => {
   if (img) img.src = imgUrl;
 });
 
-// ✅ Klicks auf Memory-Bild anzeigen
 socket.on('playerClickedOnMemoryImage', ({ playerName, x, y }) => {
   const container = document.getElementById('image-click-overlay-admin');
   const marker = document.createElement('div');
@@ -350,3 +349,8 @@ socket.on('playerClickedOnMemoryImage', ({ playerName, x, y }) => {
   marker.title = playerName;
   container.appendChild(marker);
 });
+
+// ✅ Funktion ist außerhalb und korrekt platziert
+function unlockBuzzerManually() {
+  socket.emit('unlockBuzzerManually');
+}
