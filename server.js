@@ -36,6 +36,13 @@ if (fs.existsSync(QUESTIONS_FILE)) {
 io.on('connection', (socket) => {
   console.log('🔌 Neuer Client verbunden:', socket.id);
   socket.emit('roomCode', roomCode);
+  socket.on('unlockBuzzerManually', () => {
+    console.log('🔓 Buzzer manuell freigegeben');
+    buzzerLocked = false;
+    currentBuzzer = null;
+    io.emit('resetBuzzer');
+    io.emit('clearAnswerHighlight');
+  });
 
   socket.on('registerPlayer', ({ name, avatar, roomCode: clientRoomCode }) => {
     if (parseInt(clientRoomCode) !== roomCode) {
