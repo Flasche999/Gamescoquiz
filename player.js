@@ -20,12 +20,6 @@ const estimateArea = document.getElementById('estimate-area');
 const estimateInput = document.getElementById('estimate-input');
 const estimateSubmitBtn = document.getElementById('estimate-submit-btn');
 const estimateFeedback = document.getElementById('estimate-feedback');
-function unlockBuzzer() {
-  socket.emit('resetBuzzer');
-  document.getElementById('buzzer-info').innerHTML = '🔓 Buzzer wurde manuell freigegeben';
-  document.getElementById('buzzed-answer').innerHTML = 'Ausgewählte Antwort: <strong>---</strong>';
-}
-
 
 const answerButtons = {
   A: document.getElementById('answer-a'),
