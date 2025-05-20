@@ -354,3 +354,9 @@ socket.on('playerClickedOnMemoryImage', ({ playerName, x, y }) => {
 function unlockBuzzerManually() {
   socket.emit('unlockBuzzerManually');
 }
+socket.on('resetBuzzer', () => {
+  currentBuzzer = null;
+  buzzerInfo.innerHTML = '🔓 Buzzer wurde freigegeben';
+  document.getElementById('buzzed-answer').innerHTML = 'Ausgewählte Antwort: <strong>---</strong>';
+  updatePlayers();
+});
