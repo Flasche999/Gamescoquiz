@@ -158,6 +158,12 @@ io.on('connection', (socket) => {
     io.emit('resetBuzzer');
   });
 
+  socket.on('unlockBuzzerManually', () => {
+  buzzerLocked = false;
+  io.emit('resetBuzzer');
+});
+
+
   socket.on('requestUpdate', () => {
     io.emit('updatePlayers', players);
   });
