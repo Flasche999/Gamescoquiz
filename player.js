@@ -54,14 +54,13 @@ socket.on('connect', () => {
 });
 
 socket.on('question', (data) => {
-  questionText.textContent = data.question;
+  // Verstecke alle Fragenbereiche standardmäßig
+  questionText.style.display = 'none';
+  questionMeta.style.display = 'none';
+  questionCounter.style.display = 'none';
 
-  if (data.type === 'memory') {
-    if (data.imageUrl) {
-      socket.emit('requestImageReveal', { imageUrl: data.imageUrl });
-    }
-    return;
-  }
+  // Frage trotzdem im Element speichern (Text aktualisieren, aber nicht zeigen)
+  questionText.textContent = data.question;
 
   if (data.category && data.number && data.total) {
     questionMeta.textContent = `Kategorie: ${data.category}`;
@@ -71,8 +70,21 @@ socket.on('question', (data) => {
     questionCounter.textContent = '';
   }
 
-  currentOptions = data.options || {};
+  // Bei Memory-Fragen -> nur Preview starten
+  if (data.type === 'memory') {
+    if (data.imageUrl) {
+      socket.emit('requestImageReveal', { imageUrl: data.imageUrl });
+    }
+    return; // ganz wichtig: NICHTS weiter tun!
+  }
 
+  // Bei allen anderen Fragetypen: direkt anzeigen
+  questionText.style.display = 'block';
+  questionMeta.style.display = 'block';
+  questionCounter.style.display = 'block';
+
+  // Antwort-Buttons vorbereiten
+  currentOptions = data.options || {};
   Object.entries(answerButtons).forEach(([key, btn]) => {
     btn.innerHTML = key + ': 🔒';
     btn.disabled = true;
@@ -80,6 +92,7 @@ socket.on('question', (data) => {
     btn.classList.add('locked');
   });
 
+  // Schätzfrage vorbereiten
   estimateInput.disabled = false;
   estimateSubmitBtn.disabled = false;
   estimateInput.value = '';
