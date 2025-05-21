@@ -10,11 +10,12 @@ const wrongQuestionsList = document.getElementById('wrong-questions-list');
 const estimateList = document.getElementById('estimate-list');
 const correctEstimateInput = document.getElementById('correct-estimate');
 const manualDarkenBtn = document.getElementById('btn-manual-darken');
-const resetMarkersBtn = document.getElementById('btn-reset-markers');
-
 
 let currentBuzzer = null;
 let estimates = [];
+let currentQuestionIndex = 0;
+let totalQuestions = 30; // Optional: Dynamisch setzen, falls du es aus einer Datei laden willst
+
 
 socket.on('roomCode', (code) => {
   roomCodeEl.textContent = code;
@@ -70,20 +71,10 @@ socket.on('revealClickPositions', (clicks) => {
 });
 
 document.getElementById('btn-reveal-clicks')?.addEventListener('click', () => {
-  // 👉 Marker zurücksetzen
-resetMarkersBtn.addEventListener('click', () => {
-  socket.emit('resetMemoryClicks');   // sagt dem Server Bescheid
-});
-
   socket.emit('requestRevealClicks');
 });
 
 socket.on('question', (data) => {
-  const categoryEl = document.getElementById('current-category');
-if (categoryEl) {
-  categoryEl.textContent = data.category || '–';
-}
-
   ['a','b','c','d'].forEach(letter => {
     const container = document.getElementById(`option-${letter}-container`);
     if(container) container.style.display = 'none';
@@ -100,6 +91,9 @@ if (categoryEl) {
   buzzerInfo.innerHTML = 'Noch kein Spieler hat gebuzzert';
   document.getElementById('buzzed-answer').innerHTML = 'Ausgewählte Antwort: <strong>---</strong>';
   currentBuzzer = null;
+  currentQuestionIndex++;
+updateQuestionCounter();
+
   updatePlayers();
 
   if (estimateList) estimateList.innerHTML = '';
@@ -205,6 +199,13 @@ function pauseMusic() {
 function changeVolume(volume) {
   socket.emit('setVolume', parseFloat(volume));
 }
+function updateQuestionCounter() {
+  const counterEl = document.getElementById('question-counter');
+  if (counterEl) {
+    counterEl.textContent = `Frage ${currentQuestionIndex + 1}/${totalQuestions}`;
+  }
+}
+
 
 socket.on('playMusic', () => {
   const music = document.getElementById('background-music');
@@ -371,17 +372,4 @@ socket.on('resetBuzzer', () => {
   buzzerInfo.innerHTML = '🔓 Buzzer wurde freigegeben';
   document.getElementById('buzzed-answer').innerHTML = 'Ausgewählte Antwort: <strong>---</strong>';
   updatePlayers();
-});
-
-// 🧠 Klickmarker bei Reset entfernen
-socket.on('memoryClicksReset', () => {
-  // Marker im Admin-Overlay entfernen
-  document
-    .querySelectorAll('#image-click-overlay-admin .click-marker')
-    .forEach(m => m.remove());
-
-  // Optional: falls Marker im globalen Overlay sichtbar sind
-  document
-    .querySelectorAll('#image-click-overlay .click-marker')
-    .forEach(m => m.remove());
 });
