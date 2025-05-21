@@ -79,6 +79,11 @@ resetMarkersBtn.addEventListener('click', () => {
 });
 
 socket.on('question', (data) => {
+  const categoryEl = document.getElementById('current-category');
+if (categoryEl) {
+  categoryEl.textContent = data.category || '–';
+}
+
   ['a','b','c','d'].forEach(letter => {
     const container = document.getElementById(`option-${letter}-container`);
     if(container) container.style.display = 'none';
