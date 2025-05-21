@@ -462,4 +462,11 @@ socket.on('resetClicks', () => {
   overlay.style.maskImage = 'none';
   overlay.style.mask = 'none';
   overlay.style.webkitMask = 'none';
+
+  // 🧠 Repaint/Neuzeichnen erzwingen
+  overlay.offsetHeight; // Trigger Reflow
+  overlay.style.display = 'none';
+  setTimeout(() => {
+    overlay.style.display = 'block';
+  }, 10);
 });
