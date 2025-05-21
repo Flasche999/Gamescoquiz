@@ -396,11 +396,11 @@ document.getElementById('click-catcher')?.addEventListener('click', function (e)
 });
 
 // Neue Funktion: Spieler-Klickbereiche anzeigen
+// ✅ 1. Klicks anzeigen
 socket.on('revealClicksToAll', (clicks) => {
   const overlay = document.getElementById('black-overlay');
   if (!overlay) return;
 
-  // SVG-Maske erstellen
   let svgMask = `
     <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
       <mask id="clickMask">
@@ -415,11 +415,9 @@ socket.on('revealClicksToAll', (clicks) => {
 
   const encoded = 'data:image/svg+xml;base64,' + btoa(svgMask);
 
-  // Alte Marker entfernen
   overlay.querySelectorAll('.click-reveal').forEach(el => el.remove());
   overlay.querySelectorAll('.click-hole').forEach(el => el.remove());
 
-  // Neue Marker setzen
   clicks.forEach(({ x, y, name }) => {
     const revealSpot = document.createElement('div');
     revealSpot.className = 'click-reveal';
@@ -444,7 +442,21 @@ socket.on('revealClicksToAll', (clicks) => {
     overlay.appendChild(hole);
   });
 
-  // Setze Maske
   overlay.style.webkitMaskImage = `url('${encoded}')`;
   overlay.style.maskImage = `url('${encoded}')`;
+});
+
+
+// ✅ 2. Klicks zurücksetzen
+socket.on('resetClicks', () => {
+  console.log('📢 Spieler empfängt resetClicks');
+
+  const overlay = document.getElementById('black-overlay');
+  if (!overlay) return;
+
+  overlay.querySelectorAll('.click-reveal').forEach(el => el.remove());
+  overlay.querySelectorAll('.click-hole').forEach(el => el.remove());
+
+  overlay.style.webkitMaskImage = '';
+  overlay.style.maskImage = '';
 });
