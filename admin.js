@@ -10,6 +10,8 @@ const wrongQuestionsList = document.getElementById('wrong-questions-list');
 const estimateList = document.getElementById('estimate-list');
 const correctEstimateInput = document.getElementById('correct-estimate');
 const manualDarkenBtn = document.getElementById('btn-manual-darken');
+const resetMarkersBtn = document.getElementById('btn-reset-markers');
+
 
 let currentBuzzer = null;
 let estimates = [];
@@ -68,6 +70,11 @@ socket.on('revealClickPositions', (clicks) => {
 });
 
 document.getElementById('btn-reveal-clicks')?.addEventListener('click', () => {
+  // 👉 Marker zurücksetzen
+resetMarkersBtn.addEventListener('click', () => {
+  socket.emit('resetMemoryClicks');   // sagt dem Server Bescheid
+});
+
   socket.emit('requestRevealClicks');
 });
 
@@ -359,4 +366,17 @@ socket.on('resetBuzzer', () => {
   buzzerInfo.innerHTML = '🔓 Buzzer wurde freigegeben';
   document.getElementById('buzzed-answer').innerHTML = 'Ausgewählte Antwort: <strong>---</strong>';
   updatePlayers();
+});
+
+// 🧠 Klickmarker bei Reset entfernen
+socket.on('memoryClicksReset', () => {
+  // Marker im Admin-Overlay entfernen
+  document
+    .querySelectorAll('#image-click-overlay-admin .click-marker')
+    .forEach(m => m.remove());
+
+  // Optional: falls Marker im globalen Overlay sichtbar sind
+  document
+    .querySelectorAll('#image-click-overlay .click-marker')
+    .forEach(m => m.remove());
 });
