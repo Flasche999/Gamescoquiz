@@ -36,21 +36,12 @@ if (fs.existsSync(QUESTIONS_FILE)) {
 io.on('connection', (socket) => {
   console.log('🔌 Neuer Client verbunden:', socket.id);
   socket.emit('roomCode', roomCode);
-
-  // 🔓 Buzzer manuell freigeben
   socket.on('unlockBuzzerManually', () => {
     console.log('🔓 Buzzer manuell freigegeben');
     buzzerLocked = false;
     currentBuzzer = null;
     io.emit('resetBuzzer');
     io.emit('clearAnswerHighlight');
-  });
-
-  // ✅ Marker zurücksetzen – korrekt platziert (außerhalb von anderen Events!)
-  socket.on('resetMemoryClicks', () => {
-    memoryClicks.clear();
-    playerClickMap.clear();
-    io.emit('memoryClicksReset');
   });
 
   socket.on('registerPlayer', ({ name, avatar, roomCode: clientRoomCode }) => {
@@ -280,6 +271,14 @@ io.on('connection', (socket) => {
     io.emit('revealClicksToAll', allClicks);
   });
 
+  socket.on('resetMemoryClicks', () => {
+  console.log('🔁 Memory-Klicks werden zurückgesetzt.');
+  memoryClicks.clear();
+  playerClickMap.clear();
+  io.emit('resetClicks');
+});
+
+
   // ✅ Bild manuell anzeigen (optional extern triggert)
   socket.on('showMemoryImage', ({ imageUrl }) => {
     io.emit('showMemoryImage', imageUrl);
@@ -293,4 +292,4 @@ io.on('connection', (socket) => {
 
 server.listen(PORT, () => {
   console.log(`🚀 Server läuft auf http://localhost:${PORT}`);
-});
+})
