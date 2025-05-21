@@ -75,11 +75,14 @@ document.getElementById('btn-reveal-clicks')?.addEventListener('click', () => {
 });
 
 document.getElementById('btn-clear-clicks')?.addEventListener('click', () => {
+  // ✅ Sendet das Zurücksetzen auch an den Server!
+  socket.emit('resetMemoryClicks');
+
   const overlayAdmin = document.getElementById('image-click-overlay-admin');
   if (overlayAdmin) overlayAdmin.innerHTML = '';
 
   const globalOverlay = document.getElementById('click-overlay');
-  if (globalOverlay) globalOverlay.remove(); // optional auch das Overlay von revealClickPositions
+  if (globalOverlay) globalOverlay.remove();
 });
 
 
