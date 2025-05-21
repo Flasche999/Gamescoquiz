@@ -158,10 +158,6 @@
       <strong>Raumcode:</strong> <span id="room-code">-</span>
     </div>
 
-    <div class="category-box">
-  <strong>Aktuelle Kategorie:</strong> <span id="current-category">–</span>
-</div>
-
     <div class="question-box">
       <h2>Aktuelle Frage:</h2>
       <p id="current-question">Noch keine Frage aktiv</p>
@@ -170,6 +166,8 @@
         <p id="option-b-container" style="display:none;">B: <span id="admin-option-b">---</span></p>
         <p id="option-c-container" style="display:none;">C: <span id="admin-option-c">---</span></p>
         <p id="option-d-container" style="display:none;">D: <span id="admin-option-d">---</span></p>
+        <p id="question-counter" style="font-weight:bold; color:#00ffff; font-size:18px;">Frage 1/30</p>
+
       </div>
 
       <p id="memory-timer" style="display:none;">⏳ Zeit: 20</p>
@@ -227,18 +225,10 @@
     </div>
 
     <div class="image-memory-control" style="margin-top: 30px;">
-  <h2>Memory-Bild Steuerung</h2>
-
-  <!-- Bild abdunkeln -->
-  <button id="btn-manual-darken">🌒 Memory-Bild abdunkeln</button>
-
-  <!-- Klicks aller Spieler einblenden -->
-  <button id="btn-reveal-clicks">👁️ Klicks anzeigen</button>
-
-  <!-- 🔥 NEU: Marker zurücksetzen -->
-  <button id="btn-reset-markers">🗑️ Marker zurücksetzen</button>
-</div>
-
+      <h2>Memory-Bild abdunkeln</h2>
+      <button id="btn-manual-darken">🌒 Memory-Bild abdunkeln</button>
+      <button id="btn-reveal-clicks">👁️ Klicks anzeigen</button>
+    </div>
 
     <!-- 🧠 Neues Memory-Bild + Klick-Anzeige -->
     <div id="memory-image-container">
