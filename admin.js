@@ -74,6 +74,15 @@ document.getElementById('btn-reveal-clicks')?.addEventListener('click', () => {
   socket.emit('requestRevealClicks');
 });
 
+document.getElementById('btn-clear-clicks')?.addEventListener('click', () => {
+  const overlayAdmin = document.getElementById('image-click-overlay-admin');
+  if (overlayAdmin) overlayAdmin.innerHTML = '';
+
+  const globalOverlay = document.getElementById('click-overlay');
+  if (globalOverlay) globalOverlay.remove(); // optional auch das Overlay von revealClickPositions
+});
+
+
 socket.on('question', (data) => {
   ['a','b','c','d'].forEach(letter => {
     const container = document.getElementById(`option-${letter}-container`);
