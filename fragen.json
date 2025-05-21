@@ -1,4 +1,14 @@
 [
+    {
+    "category": "Bilderrätsel",
+    "type": "memory",
+    "question": "Wo war der Y Button?",
+    "imageUrl": "https://i.imgur.com/qZFvFPk.jpeg",
+    "solution": {
+      "x": 0.8280,
+      "y": 0.2518,
+      "tolerance": 0.03
+    }
 {
     "category": "Bilderrätsel",
     "type": "memory",
