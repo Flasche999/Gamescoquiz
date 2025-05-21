@@ -400,7 +400,7 @@ socket.on('revealClicksToAll', (clicks) => {
   const overlay = document.getElementById('black-overlay');
   if (!overlay) return;
 
-  // Baue SVG-Maske mit kreisförmigen Löchern
+  // SVG-Maske erstellen
   let svgMask = `
     <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
       <mask id="clickMask">
@@ -415,9 +415,11 @@ socket.on('revealClicksToAll', (clicks) => {
 
   const encoded = 'data:image/svg+xml;base64,' + btoa(svgMask);
 
-  // Alte Löcher entfernen
+  // Alte Marker entfernen
+  overlay.querySelectorAll('.click-reveal').forEach(el => el.remove());
   overlay.querySelectorAll('.click-hole').forEach(el => el.remove());
 
+  // Neue Marker setzen
   clicks.forEach(({ x, y, name }) => {
     const revealSpot = document.createElement('div');
     revealSpot.className = 'click-reveal';
@@ -428,33 +430,21 @@ socket.on('revealClicksToAll', (clicks) => {
     revealSpot.style.height = '60px';
     revealSpot.style.transform = 'translate(-50%, -50%)';
     revealSpot.style.borderRadius = '50%';
-    revealSpot.style.background = 'rgba(255,255,255,0.05)'; // sichtbar, aber klickbar
+    revealSpot.style.background = 'rgba(255,255,255,0.05)';
     revealSpot.style.border = '2px solid lime';
     revealSpot.style.pointerEvents = 'none';
     revealSpot.title = name;
     revealSpot.style.zIndex = '5';
     overlay.appendChild(revealSpot);
-      clicks.forEach(({ x, y, name }) => {
+
     const hole = document.createElement('div');
     hole.className = 'click-hole';
     hole.style.left = `${x * 100}%`;
     hole.style.top = `${y * 100}%`;
     overlay.appendChild(hole);
-      overlay.style.webkitMaskImage = `url('${encoded}')`;
-  overlay.style.maskImage = `url('${encoded}')`;
-      });
-});
-socket.on('resetClicks', () => {
-  const overlay = document.getElementById('black-overlay');
-  if (!overlay) return;
-
-  // Entferne alle Click-Markierungen
-  overlay.querySelectorAll('.click-reveal').forEach(el => el.remove());
-  overlay.querySelectorAll('.click-hole').forEach(el => el.remove());
-
-  // Entferne Masken-Overlay
-  overlay.style.webkitMaskImage = '';
-  overlay.style.maskImage = '';
-});
-
   });
+
+  // Setze Maske
+  overlay.style.webkitMaskImage = `url('${encoded}')`;
+  overlay.style.maskImage = `url('${encoded}')`;
+});
