@@ -42,6 +42,12 @@ io.on('connection', (socket) => {
     currentBuzzer = null;
     io.emit('resetBuzzer');
     io.emit('clearAnswerHighlight');
+    socket.on('resetMemoryClicks', () => {
+  memoryClicks.clear();
+  playerClickMap.clear();
+  io.emit('memoryClicksReset'); // sagt allen Clients: löscht eure Marker
+});
+    
   });
 
   socket.on('registerPlayer', ({ name, avatar, roomCode: clientRoomCode }) => {
