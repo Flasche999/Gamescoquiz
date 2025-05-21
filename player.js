@@ -447,16 +447,19 @@ socket.on('revealClicksToAll', (clicks) => {
 });
 
 
-// ✅ 2. Klicks zurücksetzen
 socket.on('resetClicks', () => {
   console.log('📢 Spieler empfängt resetClicks');
 
   const overlay = document.getElementById('black-overlay');
   if (!overlay) return;
 
+  // Entferne visuelle Marker
   overlay.querySelectorAll('.click-reveal').forEach(el => el.remove());
   overlay.querySelectorAll('.click-hole').forEach(el => el.remove());
 
-  overlay.style.webkitMaskImage = '';
-  overlay.style.maskImage = '';
+  // Deaktiviere Masken vollständig
+  overlay.style.webkitMaskImage = 'none';
+  overlay.style.maskImage = 'none';
+  overlay.style.mask = 'none';
+  overlay.style.webkitMask = 'none';
 });
