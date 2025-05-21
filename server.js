@@ -36,18 +36,21 @@ if (fs.existsSync(QUESTIONS_FILE)) {
 io.on('connection', (socket) => {
   console.log('🔌 Neuer Client verbunden:', socket.id);
   socket.emit('roomCode', roomCode);
+
+  // 🔓 Buzzer manuell freigeben
   socket.on('unlockBuzzerManually', () => {
     console.log('🔓 Buzzer manuell freigegeben');
     buzzerLocked = false;
     currentBuzzer = null;
     io.emit('resetBuzzer');
     io.emit('clearAnswerHighlight');
-    socket.on('resetMemoryClicks', () => {
-  memoryClicks.clear();
-  playerClickMap.clear();
-  io.emit('memoryClicksReset'); // sagt allen Clients: löscht eure Marker
-});
-    
+  });
+
+  // ✅ Marker zurücksetzen – korrekt platziert (außerhalb von anderen Events!)
+  socket.on('resetMemoryClicks', () => {
+    memoryClicks.clear();
+    playerClickMap.clear();
+    io.emit('memoryClicksReset');
   });
 
   socket.on('registerPlayer', ({ name, avatar, roomCode: clientRoomCode }) => {
