@@ -395,12 +395,15 @@ document.getElementById('click-catcher')?.addEventListener('click', function (e)
   socket.emit('imageAnswer', { x: parseFloat(x), y: parseFloat(y) });
 });
 
-// Neue Funktion: Spieler-Klickbereiche anzeigen
-// ✅ 1. Klicks anzeigen
+// ✅ Klickbereiche anzeigen
 socket.on('revealClicksToAll', (clicks) => {
-  const overlay = document.getElementById('black-overlay');
-  if (!overlay) return;
+  const container = document.getElementById('black-overlay');
+  if (!container) return;
 
+  // Vorherige Inhalte entfernen
+  container.querySelectorAll('.click-reveal, .click-hole').forEach(el => el.remove());
+
+  // Neue Maske erstellen
   let svgMask = `
     <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
       <mask id="clickMask">
@@ -412,61 +415,44 @@ socket.on('revealClicksToAll', (clicks) => {
       <rect width="100%" height="100%" fill="black" mask="url(#clickMask)" />
     </svg>
   `;
-
   const encoded = 'data:image/svg+xml;base64,' + btoa(svgMask);
+  container.style.webkitMaskImage = `url('${encoded}')`;
+  container.style.maskImage = `url('${encoded}')`;
 
-  overlay.querySelectorAll('.click-reveal').forEach(el => el.remove());
-  overlay.querySelectorAll('.click-hole').forEach(el => el.remove());
-
+  // Sichtbare Klick-Markierungen anzeigen
   clicks.forEach(({ x, y, name }) => {
-    const revealSpot = document.createElement('div');
-    revealSpot.className = 'click-reveal';
-    revealSpot.style.position = 'absolute';
-    revealSpot.style.left = `${x * 100}%`;
-    revealSpot.style.top = `${y * 100}%`;
-    revealSpot.style.width = '60px';
-    revealSpot.style.height = '60px';
-    revealSpot.style.transform = 'translate(-50%, -50%)';
-    revealSpot.style.borderRadius = '50%';
-    revealSpot.style.background = 'rgba(255,255,255,0.05)';
-    revealSpot.style.border = '2px solid lime';
-    revealSpot.style.pointerEvents = 'none';
-    revealSpot.title = name;
-    revealSpot.style.zIndex = '5';
-    overlay.appendChild(revealSpot);
+    const reveal = document.createElement('div');
+    reveal.className = 'click-reveal';
+    reveal.style.left = `${x * 100}%`;
+    reveal.style.top = `${y * 100}%`;
+    reveal.title = name;
+    container.appendChild(reveal);
 
     const hole = document.createElement('div');
     hole.className = 'click-hole';
     hole.style.left = `${x * 100}%`;
     hole.style.top = `${y * 100}%`;
-    overlay.appendChild(hole);
+    container.appendChild(hole);
   });
-
-  overlay.style.webkitMaskImage = `url('${encoded}')`;
-  overlay.style.maskImage = `url('${encoded}')`;
 });
 
-
+// ✅ Klickbereiche zurücksetzen
 socket.on('resetClicks', () => {
   console.log('📢 Spieler empfängt resetClicks');
 
-  const overlay = document.getElementById('black-overlay');
-  if (!overlay) return;
+  const container = document.getElementById('black-overlay');
+  if (!container) return;
 
-  // Entferne visuelle Marker
-  overlay.querySelectorAll('.click-reveal').forEach(el => el.remove());
-  overlay.querySelectorAll('.click-hole').forEach(el => el.remove());
+  // Alle Marker entfernen
+  container.querySelectorAll('.click-reveal, .click-hole').forEach(el => el.remove());
 
-  // Deaktiviere Masken vollständig
-  overlay.style.webkitMaskImage = 'none';
-  overlay.style.maskImage = 'none';
-  overlay.style.mask = 'none';
-  overlay.style.webkitMask = 'none';
+  // Masken komplett deaktivieren
+  container.style.webkitMaskImage = 'none';
+  container.style.maskImage = 'none';
 
-  // 🧠 Repaint/Neuzeichnen erzwingen
-  overlay.offsetHeight; // Trigger Reflow
-  overlay.style.display = 'none';
-  setTimeout(() => {
-    overlay.style.display = 'block';
-  }, 10);
+  // 🧠 Trick: Neuzeichnen erzwingen
+  container.style.display = 'none';
+  requestAnimationFrame(() => {
+    container.style.display = 'block';
+  });
 });
